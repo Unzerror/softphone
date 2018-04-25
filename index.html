@@ -1,0 +1,1946 @@
+<!DOCTYPE html >
+<html>
+
+<head>
+    <meta name="format-detection" content="telephone=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <link type="text/css" rel="stylesheet" href="css/materialize.min.css" media="screen,projection" />
+    <link type="text/css" rel="stylesheet" href="css/index.css">
+    <title>Kloud.one ассистенты</title>
+</head>
+
+<body>
+    <div id="main_softphone_page" class="page" hidden>
+        <nav>
+            <div class="nav-wrapper blue">
+                <ul class="tabs tabs-fixed-width blue softphone-page-nav">
+                    <li class="tab " id="last_tab">
+                        <a href="javascript:void(0)">
+                            <i class="large material-icons">access_time</i>
+                            <span>Последние</span>
+                        </a>
+                    </li>
+                    <li class="tab" id="contacts_tab">
+                        <a href="javascript:void(0)">
+                            <i class="large material-icons">contact_phone</i>
+                            Контакты
+                        </a>
+                    </li>
+                    <li class="tab" id="buttons_tab">
+                        <a href="javascript:void(0)">
+                            <i class="large material-icons">dialpad</i>
+                            Номер
+                        </a>
+                    </li>
+                    <li class="tab" id="settings_tab">
+                        <a href="javascript:void(0)">
+                            <i class="large material-icons">tune</i>
+                            Настройки
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <div id="softphone_last_page" class="softphone-page" hidden>
+            <ul class="collection"></ul>
+            <span id="not_event" hidden>Список последних действий пуст</span>
+        </div>
+        <div id="softphone_contacts_page" class="softphone-page" hidden>
+            <ul class="collection"></ul>
+            <a id="sp_contacts_add_btn" class="btn-floating btn-large blue add-btn">
+                <i class="material-icons">add</i>
+            </a>
+            </ul>
+        </div>
+        <div id="softphone_buttons_page" class="softphone-page" hidden>
+            <div class="row">
+                <div class="col s10">
+                    <input id="telephone_number" type="text" class="input">
+                </div>
+                <div class="col s2 delnumbers">
+                    <p>
+                        <a href="javascript:void(0)">
+                            <img src="img/backspace.png" alt="backspace" id="delnumbers">
+                        </a>
+                    </p>
+                </div>
+                <form class="softphone-numb">
+                    <div class="dialerrow">
+                        <a href="javascript:void(0)" id="but_1" class="btn-large dialer">1</a>
+                        <a href="javascript:void(0)" id="but_2" class="btn-large dialer">2</a>
+                        <a href="javascript:void(0)" id="but_3" class="btn-large dialer">3</a>
+                    </div>
+                    <div>
+                        <a href="javascript:void(0)" id="but_4" class="btn-large dialer">4</a>
+                        <a href="javascript:void(0)" id="but_5" class="btn-large dialer">5</a>
+                        <a href="javascript:void(0)" id="but_6" class="btn-large dialer">6</a>
+                    </div>
+                    <div>
+                        <a href="javascript:void(0)" id="but_7" class="btn-large dialer">7</a>
+                        <a href="javascript:void(0)" id="but_8" class="btn-large dialer">8</a>
+                        <a href="javascript:void(0)" id="but_9" class="btn-large dialer">9</a>
+                    </div>
+                    <div>
+                        <a href="javascript:void(0)" id="but_star" class="btn-large dialer">*</a>
+                        <a href="javascript:void(0)" id="but_0" class="btn-large dialer">0</a>
+                        <a href="javascript:void(0)" id="but_lettice" class="btn-large dialer">#</a>
+                    </div>
+                    <div>
+                        <a id="message_btn" class="btn-floating btn-large green left">
+                            <img src="img/chat.png">
+                        </a>
+                        <div id="send_message_from_buttons_page" class="row chat_input">
+                            <div class="input-field col s8">
+                                <textarea id="chat_input_from_buttons_page" class="materialize-textarea" placeholder="Введите сообщение"></textarea>
+                                <a id="chat_send_btn_from_buttons_page">
+                                    <i class="material-icons">send</i>
+                                </a>
+                            </div>
+                            <div>
+                                <a id="chat_send_btn_from_buttons_page">
+                                    <i class="material-icons">send</i>
+                                </a>
+                            </div>
+                        </div>
+                        <a id="call_btn" class="blue btn-large call-btn">
+                            <i class="material-icons left">call</i>
+                            Звонить
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div id="softphone_settings_page" class="softphone-page" hidden>
+            <ul class="collection">
+                <li id="softphone_settings_connection_choose" class="collection-item valign-wrapper">
+                    <i class="material-icons list-icon">settings_input_composite</i>
+                    <span class="menu-list-name ">Настройки подключения</span>
+                    <i class="material-icons list-icon right-align">chevron_right</i>
+                </li>
+                <li id="softphone_settings_notification" class="collection-item valign-wrapper">
+                    <i class="material-icons list-icon">speaker_notes</i>
+                    <span class="menu-list-name ">Уведомления</span>
+                    <div class="switch right-align">
+                        <label>
+                            <input type="checkbox">
+                            <span class="lever"></span>
+                        </label>
+                    </div>
+                </li>
+                <li id="softphone_settings_autoresponder" class="collection-item valign-wrapper">
+                    <i class="material-icons list-icon">spellcheck</i>
+                    <span class="menu-list-name ">Автоответ</span>
+                    <div class="switch right-align">
+                        <label>
+                            <input type="checkbox">
+                            <span class="lever"></span>
+                        </label>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div id="softphone_settings_connection_page" hidden>
+            <nav>
+                <div class="nav-wrapper blue">
+                    <a href="javascript:void(0)" class="back-btn left back-to-softphone-settings-page">
+                        <i class="material-icons">arrow_back</i>
+                    </a>
+                    <a href="javascript:void(0)" class="logo left">Настройки подключения</a>
+                    <ul class="right">
+                        <li id="save_softphone_settings_connection_btn">
+                            <a href="javascript:void(0)">
+                                <i class="material-icons">done</i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+            <ul id="SP_settiings_connection_menu" class="collection">
+                <li class="collection-item valign-wrapper required">
+                    <span class="list-name">SIP ID</span>
+                    <input id="SPNumber" class="settings-list-input spsc-input required" type="text" />
+                </li>
+                <li class="collection-item valign-wrapper required">
+                    <span class="list-name">Пароль</span>
+                    <input id="SPPassword" class="settings-list-input spsc-input" type="password" />
+                </li>
+                <li class="collection-item valign-wrapper required">
+                    <span class="list-name">Хост</span>
+                    <input id="SPhost" class="settings-list-input spsc-input" type="text" />
+                </li>
+                <li class="collection-item valign-wrapper required">
+                    <span class="list-name">WS Server</span>
+                    <input id="softphoneWSServer" placeholder="ws://" class="settings-list-input spsc-input" type="text" />
+                </li>
+            </ul>
+            <div id="check_settings_block">
+                <input id="check_input" disabled>
+                <a id="sp_check_connect_button" class="btn blue right sp-connect-button">
+                    Подключиться
+                </a>
+            </div>
+        </div>
+        <div id="softphone_add_contact_page" hidden>
+            <nav>
+                <div class="nav-wrapper blue">
+                    <a href="javascript:void(0)" class="back-btn left back-to-softphone-contacts-page">
+                        <i class="material-icons">arrow_back</i>
+                    </a>
+                    <a href="javascript:void(0)" class="logo left">Новый контакт</a>
+                </div>
+            </nav>
+            <ul class="collection">
+                <li id="sp_set_avatar">
+                    <a class="active" href="javascript:void(0)">
+                        <img id="add_avatar" src="avatars/noavatar1.png" class="sp-add-cont-avatar">
+                        <i id="sp_add_avatar_icon" class="material-icons">add_a_photo</i>
+                        <input id="photo_select" type="file" name="photo" hidden onchange="previewFile()" accept="image/*">
+                    </a>
+                </li>
+                <li class="collection-item valign-wrapper">
+                    <span class="list-name">Имя контакта</span>
+                    <input id="sp_add_cont_name" class="settings-list-input spsc-input" type="text" />
+                </li>
+                <li class="collection-item valign-wrapper">
+                    <span class="list-name">Логин</span>
+                    <input id="sp_add_cont_login" class="settings-list-input spsc-input" type="text" />
+                </li>
+            </ul>
+            <div id="sp_save_cont_call_but">
+                <a id="sp_save_cont_call" class="btn blue save-cont-btn">
+                    <i class="material-icons left">save</i>
+                    Сохранить
+                </a>
+            </div>
+        </div>
+        <div id="softphone_edit_contact_page" hidden>
+            <nav>
+                <div class="nav-wrapper blue">
+                    <a href="javascript:void(0)" class="back-btn left back-to-softphone-contacts-page">
+                        <i class="material-icons">arrow_back</i>
+                    </a>
+                    <a href="javascript:void(0)" class="logo left">Редактирование контакта</a>
+                    <ul class="right">
+                        <li id="sp_del_cont">
+                            <a href="javascript:void(0)">
+                                <i class="material-icons">delete</i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+            <ul class="collection">
+                <li id="sp_edit_avatar">
+                    <a class="active" href="javascript:void(0)">
+                        <img id="edit_avatar" src="avatars/noavatar1.png" class="sp-edit-cont-avatar">
+                        <i id="sp_edit_avatar_icon" class="material-icons">add_a_photo</i>
+                        <input id="edit_photo_select" type="file" name="photo" hidden onchange="previewEditFile()" accept="image/*">
+                    </a>
+                </li>
+                <li class="collection-item valign-wrapper">
+                    <span class="list-name">Имя контакта</span>
+                    <input id="sp_edit_cont_name" class="settings-list-input spsc-input" type="text" />
+                </li>
+                <li class="collection-item valign-wrapper">
+                    <span class="list-name">Логин</span>
+                    <input id="sp_edit_cont_login" class="settings-list-input spsc-input" type="text" />
+                </li>
+            </ul>
+            <div id="sp_save_cont_call_but">
+                <a id="sp_save_edit_cont_call" class="btn blue save-cont-btn">
+                    <i class="material-icons left">save</i>
+                    Сохранить
+                </a>
+            </div>
+        </div>
+    </div>
+    <div id="main_page" class="page" hidden>
+        <ul id="dropdownMenu" class="dropdown-content dropdown-submenu">
+            <li onclick="exitApp()">
+                <a href="javascript:void(0)">Выход</a>
+            </li>
+        </ul>
+        <nav>
+            <div class="nav-wrapper blue">
+                <a href="javascript:void(0)" class="logo left">Kloud.one ассистенты</a>
+                <ul class="right">
+                    <li>
+                        <a href="javascript:void(0)" class="dropdown-button" data-activates="dropdownMenu">
+                            <i class="material-icons">more_vert</i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <ul class="collection"></ul>
+        <a id="add_cons_btn" class="btn-floating btn-large blue add-btn">
+            <i class="material-icons">add</i>
+        </a>
+    </div>
+    <div id="add_cons_page" class="page" hidden>
+        <nav>
+            <div class="nav-wrapper blue">
+                <a href="javascript:void(0)" class="back-btn left back-to-main">
+                    <i class="material-icons">arrow_back</i>
+                </a>
+                <a href="javascript:void(0)" class="logo left">Форма выбора ассистента</a>
+            </div>
+        </nav>
+        <ul class="collection"></ul>
+    </div>
+    <div id="trusted_auth_page" class="page" hidden>
+        <nav>
+            <div class="nav-wrapper blue">
+                <a href="javascript:void(0)" class="back-btn left back-to-main">
+                    <i class="material-icons">arrow_back</i>
+                </a>
+                <a href="javascript:void(0)" class="logo left">Trusted.net авторизация</a>
+                <ul class="right">
+                    <li id="auth_btn">
+                        <a href="javascript:void(0)">
+                            <i class="material-icons">done</i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <ul class="collection">
+            <li class="collection-item valign-wrapper">
+                <i class="material-icons list-icon">person</i>
+                <input id="auth_login" type="text" class="list-input" placeholder="Логин">
+            </li>
+            <li class="collection-item valign-wrapper">
+                <i class="material-icons list-icon">vpn_key</i>
+                <input id="auth_password" type="password" class="list-input" placeholder="Пароль">
+            </li>
+        </ul>
+    </div>
+    <div id="med_current_page" class="page" hidden>
+        <nav>
+            <div class="nav-wrapper blue">
+                <a href="javascript:void(0)" class="back-btn left back-to-main">
+                    <i class="material-icons">arrow_back</i>
+                </a>
+                <a href="javascript:void(0)" class="logo left">Медицинский ассистент</a>
+                <ul class="right">
+                    <li id="med_del_btn">
+                        <a href="javascript:void(0)">
+                            <i class="material-icons">delete</i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <ul id="med_menu"></ul>
+    </div>
+    <div id="pers_current_page" class="page" hidden>
+        <nav>
+            <div class="nav-wrapper blue">
+                <a href="javascript:void(0)" class="back-btn left back-to-main">
+                    <i class="material-icons">arrow_back</i>
+                </a>
+                <a href="javascript:void(0)" class="logo left">Персональный ассистент</a>
+                <ul class="right">
+                    <li id="pers_del_btn">
+                        <a href="javascript:void(0)">
+                            <i class="material-icons">delete</i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <ul id="pers_menu" class="collection">
+            <li id="pers_contacts_choose" class="collection-item valign-wrapper">
+                <i class="material-icons list-icon">contacts</i>
+                <span class="menu-list-name">Контакты</span>
+            </li>
+            <li id="pers_journal_choose" class="collection-item valign-wrapper">
+                <i class="material-icons list-icon">view_list</i>
+                <span class="menu-list-name">Журнал звонков</span>
+            </li>
+            <li id="pers_settings_choose" class="collection-item valign-wrapper">
+                <i class="material-icons list-icon">settings</i>
+                <span class="menu-list-name">Настройки</span>
+            </li>
+        </ul>
+    </div>
+    <div id="pers_settings_page" class="page" hidden>
+        <nav>
+            <div class="nav-wrapper blue">
+                <a href="javascript:void(0)" class="back-btn left back-to-main">
+                    <i class="material-icons">arrow_back</i>
+                </a>
+                <a href="javascript:void(0)" class="logo left">Настройки</a>
+            </div>
+        </nav>
+        <ul id="pers_settings_menu" class="collection">
+            <li id="pers_settings_profile_choose" class="collection-item valign-wrapper">
+                <span class="menu-list-name">Профиль пользователя</span>
+                <i class="material-icons list-icon right-align">chevron_right</i>
+            </li>
+            <li id="pers_settings_phones_choose" class="collection-item valign-wrapper">
+                <span class="menu-list-name">Настройки телефонов</span>
+                <i class="material-icons list-icon right-align">chevron_right</i>
+            </li>
+            <li id="pers_settings_service_choose" class="collection-item valign-wrapper">
+                <span class="menu-list-name">Настройки сервиса</span>
+                <i class="material-icons list-icon right-align">chevron_right</i>
+            </li>
+        </ul>
+    </div>
+    <div id="pers_phones_settings_page" class="page" hidden>
+        <nav>
+            <div class="nav-wrapper blue">
+                <a href="javascript:void(0)" class="back-btn left back-to-pers-settings">
+                    <i class="material-icons">arrow_back</i>
+                </a>
+                <a href="javascript:void(0)" class="logo left">Телефоны</a>
+                <ul class="right">
+                    <li id="pers_phones_selectall_btn" class="holded-icon" hidden>
+                        <a href="javascript:void(0)">
+                            <i class="material-icons">filter_none</i>
+                        </a>
+                    </li>
+                    <li id="pers_phones_del_btn" class="holded-icon" hidden>
+                        <a href="javascript:void(0)">
+                            <i class="material-icons">delete</i>
+                        </a>
+                    </li>
+                    <li class="holded-icon unhold" hidden>
+                        <a href="javascript:void(0)">
+                            <i class="material-icons">done</i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <ul id="pers_phones_list" class="collection"></ul>
+        <a id="pers_phones_add_btn" class="btn-floating btn-large blue add-btn">
+            <i class="material-icons">add</i>
+        </a>
+    </div>
+    <div id="pers_phones_edit_page" class="page" hidden>
+        <nav>
+            <div class="nav-wrapper blue">
+                <a href="javascript:void(0)" class="back-btn left back-to-pers-phones">
+                    <i class="material-icons">arrow_back</i>
+                </a>
+                <a href="javascript:void(0)" class="logo left">Настройки телефона</a>
+                <ul class="right">
+                    <li id="save_pers_phones_add_time_btn">
+                        <a href="javascript:void(0)">
+                            <i class="material-icons">done</i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <ul id="pers_phone_menu_list" class="collection">
+            <li class="collection-item valign-wrapper">
+                <span class="list-name">Телефон</span>
+                <span id="pers_phone_edit_phone" class="list-name right-align"></span>
+            </li>
+            <li class="collection-item valign-wrapper">
+                <span class="list-name">Добавить секунд</span>
+                <input id="pers_add_time_input" min="0" class="settings-list-input" type="number" onkeyup="isright(this);" />
+            </li>
+            <li class="collection-item valign-wrapper">
+                <span class="list-name">Активировать сервис</span>
+                <div class="switch right-align">
+                    <label>
+                        <input id="pers_phone_service_toggle" type="checkbox">
+                        <span class="lever"></span>
+                    </label>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <div id="pers_service_settings_page" class="page" hidden>
+        <nav>
+            <div class="nav-wrapper blue">
+                <a href="javascript:void(0)" class="back-btn left back-to-pers-settings">
+                    <i class="material-icons">arrow_back</i>
+                </a>
+                <a href="javascript:void(0)" class="logo left">Настройки сервиса</a>
+                <ul class="right">
+                    <li id="save_service_settings_btn">
+                        <a href="javascript:void(0)">
+                            <i class="material-icons">done</i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <ul id="pers_service_settings_menu" class="collection">
+            <li class="collection-item valign-wrapper">
+                <span class="list-name">Ваш телефон</span>
+                <input id="pers_service_settings_self_phone" class="settings-list-input" type="text" />
+            </li>
+            <li class="collection-item valign-wrapper">
+                <span class="list-name">Ваш имя</span>
+                <input id="pers_service_settings_name" class="settings-list-input" type="text" />
+            </li>
+            <li class="collection-item valign-wrapper">
+                <span class="list-name">Ваш пол</span>
+                <select id="pers_service_settings_sex" class="settings-list-select">
+                    <option value="m">мужской</option>
+                    <option value="f">женский</option>
+                </select>
+            </li>
+            <li class="collection-item valign-wrapper">
+                <span class="list-name">Голос</span>
+                <select id="pers_service_settings_voice" class="settings-list-select">
+                    <option value="jane">jane</option>
+                    <option value="oksana">oksana</option>
+                    <option value="alyss">alyss</option>
+                    <option value="omazh">omazh</option>
+                    <option value="zahar">zahar</option>
+                    <option value="ermil">ermil</option>
+                </select>
+            </li>
+            <li class="collection-item valign-wrapper">
+                <span class="list-name">Джингл</span>
+                <div class="select-jingle-block">
+                    <select id="pers_service_settings_jingle" class="jingle-select">
+                        <option value="jingle1.wav">Джингл 1</option>
+                        <option value="jingle2.wav">Джингл 2</option>
+                        <option value="jingle3.wav">Джингл 3</option>
+                        <option value="jingle4.wav">Джингл 4</option>
+                        <option value="jingle5.wav">Джингл 5</option>
+                        <option value="jingle6.wav">Джингл 6</option>
+                        <option value="jingle7.wav">Джингл 7</option>
+                        <option value="jingle8.wav">Джингл 8</option>
+                        <option value="jingle9.wav">Джингл 9</option>
+                        <option value="jingle10.wav">Джингл 10</option>
+                        <option value="jingle11.wav">Джингл 11</option>
+                        <option value="jingle12.wav">Джингл 12</option>
+                        <option value="jingle13.wav">Джингл 13</option>
+                    </select>
+                    <a id="pers_settings_service_jingle_play" class="btn-floating blue play-btn">
+                        <i class="material-icons">play_arrow</i>
+                    </a>
+                </div>
+            </li>
+            <li class="collection-item valign-wrapper">
+                <span class="list-name">Причина</span>
+                <select id="pers_service_settings_reason" class="settings-list-select"></select>
+            </li>
+            <li class="collection-item valign-wrapper">
+                <span class="list-name">Своя причина</span>
+                <input id="pers_service_settings_reason_custom" class="settings-list-input" type="text" />
+            </li>
+            <li class="collection-item valign-wrapper">
+                <span class="list-name">Email</span>
+                <span id="pers_service_settings_email" class="list-name right-align"></span>
+            </li>
+            <li class="collection-item valign-wrapper">
+                <span class="list-name">Пароль к Email</span>
+                <input id="pers_service_settings_email_password" class="settings-list-input" type="password" />
+            </li>
+        </ul>
+    </div>
+    <div id="pers_profile_page" class="page" hidden>
+        <nav>
+            <div class="nav-wrapper blue">
+                <a href="javascript:void(0)" class="back-btn left back-to-pers-settings">
+                    <i class="material-icons">arrow_back</i>
+                </a>
+                <a href="javascript:void(0)" class="logo left">Профиль пользователя</a>
+            </div>
+        </nav>
+        <ul id="pers_settings_menu" class="collection">
+            <li class="collection-item valign-wrapper">
+                <span class="list-name">Email</span>
+                <span id="pers_profile_email" class="list-name right-align"></span>
+            </li>
+            <li class="collection-item valign-wrapper">
+                <span class="list-name">Логин</span>
+                <span id="pers_profile_login" class="list-name right-align"></span>
+            </li>
+            <li class="collection-item valign-wrapper">
+                <span class="list-name">Нераспределённое время</span>
+                <span id="pers_profile_unallocated_time" class="list-name right-align"></span>
+            </li>
+        </ul>
+    </div>
+    <div id="pers_contacts_page" class="page" hidden>
+        <ul id="pers_contacts_menu" class="dropdown-content dropdown-submenu">
+            <li onclick="showPersContactsImport()">
+                <a href="javascript:void(0)">Импорт</a>
+            </li>
+        </ul>
+        <nav>
+            <div class="nav-wrapper blue">
+                <a href="javascript:void(0)" class="back-btn left back-to-pers">
+                    <i class="material-icons">arrow_back</i>
+                </a>
+                <a href="javascript:void(0)" class="logo left">Контакты</a>
+                <ul class="right">
+                    <li class="normal-icon">
+                        <a href="javascript:void(0)" class="dropdown-button" data-activates="pers_contacts_menu">
+                            <i class="material-icons">more_vert</i>
+                        </a>
+                    </li>
+                    <li id="pers_contacts_selectall_btn" class="holded-icon" hidden>
+                        <a href="javascript:void(0)">
+                            <i class="material-icons">filter_none</i>
+                        </a>
+                    </li>
+                    <li id="pers_contacts_del_btn" class="holded-icon" hidden>
+                        <a href="javascript:void(0)">
+                            <i class="material-icons">delete</i>
+                        </a>
+                    </li>
+                    <li class="holded-icon unhold" hidden>
+                        <a href="javascript:void(0)">
+                            <i class="material-icons">done</i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <ul id="pers_contacts_list" class="collection"></ul>
+        <a id="pers_contacts_add_btn" class="btn-floating btn-large blue add-btn">
+            <i class="material-icons">add</i>
+        </a>
+    </div>
+    <div id="pers_contacts_edit_page" class="page" hidden>
+        <nav>
+            <div class="nav-wrapper blue">
+                <a href="javascript:void(0)" class="back-btn left back-to-pers-contacts">
+                    <i class="material-icons">arrow_back</i>
+                </a>
+                <a href="javascript:void(0)" class="logo left">Редактирование контакта</a>
+                <ul class="right">
+                    <li id="pers_contacts_save_edit_btn">
+                        <a href="javascript:void(0)">
+                            <i class="material-icons">done</i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <ul id="pers_contacts_edit_list" class="collection">
+            <li class="collection-item valign-wrapper">
+                <i class="material-icons list-icon">call</i>
+                <input id="pers_contacts_edit_phone" type="text" class="list-input" placeholder="Телефон">
+            </li>
+            <li class="collection-item valign-wrapper">
+                <i class="material-icons list-icon">person</i>
+                <input id="pers_contacts_edit_name" type="text" class="list-input" placeholder="Имя">
+            </li>
+        </ul>
+    </div>
+    <div id="pers_contacts_add_page" class="page" hidden>
+        <nav>
+            <div class="nav-wrapper blue">
+                <a href="javascript:void(0)" class="back-btn left back-to-pers-contacts">
+                    <i class="material-icons">arrow_back</i>
+                </a>
+                <a href="javascript:void(0)" class="logo left">Создание контакта</a>
+                <ul class="right">
+                    <li id="pers_contacts_save_add_btn">
+                        <a href="javascript:void(0)">
+                            <i class="material-icons">done</i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <ul id="pers_contacts_add_list" class="collection">
+            <li class="collection-item valign-wrapper">
+                <i class="material-icons list-icon">call</i>
+                <input id="pers_contacts_add_phone" type="text" class="list-input" placeholder="Телефон">
+            </li>
+            <li class="collection-item valign-wrapper">
+                <i class="material-icons list-icon">person</i>
+                <input id="pers_contacts_add_name" type="text" class="list-input" placeholder="Имя">
+            </li>
+        </ul>
+    </div>
+    <div id="pers_journal_page" class="page" hidden>
+        <ul id="pers_journal_menu" class="dropdown-content dropdown-submenu">
+            <li onclick="showPersJournalDateRange()">
+                <a href="javascript:void(0)">За период</a>
+            </li>
+            <li onclick="showPersJournalCountInput()">
+                <a href="javascript:void(0)">По сколько</a>
+            </li>
+        </ul>
+        <nav>
+            <div class="nav-wrapper blue">
+                <a href="javascript:void(0)" class="back-btn left back-to-pers">
+                    <i class="material-icons">arrow_back</i>
+                </a>
+                <a href="javascript:void(0)" class="logo left">Журнал звонков</a>
+                <ul class="right">
+                    <li>
+                        <a href="javascript:void(0)" class="dropdown-button" data-activates="pers_journal_menu">
+                            <i class="material-icons">more_vert</i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <ul id="pers_journal_list" class="collection"></ul>
+    </div>
+    <div id="preloader_page" class="preloader-page" hidden>
+        <div class="preloader-wrapper big active preloader-center">
+            <div class="spinner-layer spinner-blue-only">
+                <div class="circle-clipper left">
+                    <div class="circle"></div>
+                </div>
+                <div class="gap-patch">
+                    <div class="circle"></div>
+                </div>
+                <div class="circle-clipper right">
+                    <div class="circle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="pers_journal_date_range_page" class="page" hidden>
+        <nav>
+            <div class="nav-wrapper blue">
+                <a href="javascript:void(0)" class="back-btn left back-to-pers-journal">
+                    <i class="material-icons">arrow_back</i>
+                </a>
+                <a href="javascript:void(0)" class="logo left">Выбор даты</a>
+            </div>
+        </nav>
+        <ul class="collection">
+            <li class="collection-item valign-wrapper">
+                <i class="material-icons list-icon">today</i>
+                <input id="pers_journal_date_range" type="text" class="list-input pers-datepicker" placeholder="Выберите дату">
+            </li>
+        </ul>
+    </div>
+    <div id="pers_contacts_import_page" class="page" hidden>
+        <nav>
+            <div class="nav-wrapper blue">
+                <a href="javascript:void(0)" class="back-btn left back-to-pers-contacts">
+                    <i class="material-icons">arrow_back</i>
+                </a>
+                <a href="javascript:void(0)" class="logo left">Импорт контактов</a>
+                <ul class="right">
+                    <li id="pers_contacts_selectall_import_btn">
+                        <a href="javascript:void(0)">
+                            <i class="material-icons">filter_none</i>
+                        </a>
+                    </li>
+                    <li id="pers_contacts_save_import_btn">
+                        <a href="javascript:void(0)">
+                            <i class="material-icons">done</i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <ul id="pers_contacts_import_list" class="collection"></ul>
+    </div>
+    <div id="pers_journal_count_page" class="page" hidden>
+        <nav>
+            <div class="nav-wrapper blue">
+                <a href="javascript:void(0)" class="back-btn left back-to-pers-journal">
+                    <i class="material-icons">arrow_back</i>
+                </a>
+                <a href="javascript:void(0)" class="logo left">Количество записей</a>
+            </div>
+        </nav>
+        <ul class="collection">
+            <li class="collection-item valign-wrapper">
+                <i class="material-icons list-icon">reorder</i>
+                <input id="pers_journal_count" type="number" class="list-input" placeholder="Введите количество записей">
+            </li>
+        </ul>
+    </div>
+    <div id="cold_current_page" class="page" hidden>
+        <nav>
+            <div class="nav-wrapper blue">
+                <a href="javascript:void(0)" class="back-btn left back-to-main">
+                    <i class="material-icons">arrow_back</i>
+                </a>
+                <a href="javascript:void(0)" class="logo left">Холодные звонки</a>
+                <ul class="right">
+                    <li id="cold_del_btn">
+                        <a href="javascript:void(0)">
+                            <i class="material-icons">delete</i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <ul id="cold_menu" class="collection">
+            <li id="cold_contacts_choose" class="collection-item valign-wrapper">
+                <i class="material-icons list-icon">contacts</i>
+                <span class="menu-list-name">Контакты</span>
+            </li>
+            <li id="cold_journal_choose" class="collection-item valign-wrapper">
+                <i class="material-icons list-icon">view_list</i>
+                <span class="menu-list-name">Журнал звонков</span>
+            </li>
+            <li id="cold_settings_choose" class="collection-item valign-wrapper">
+                <i class="material-icons list-icon">settings</i>
+                <span class="menu-list-name">Настройки</span>
+            </li>
+        </ul>
+    </div>
+    <div id="cold_contacts_page" class="page" hidden>
+        <ul id="cold_contacts_menu" class="dropdown-content dropdown-submenu">
+            <li onclick="showColdContactsImport()">
+                <a href="javascript:void(0)">Импорт</a>
+            </li>
+        </ul>
+        <nav>
+            <div class="nav-wrapper blue">
+                <a href="javascript:void(0)" class="back-btn left back-to-cold">
+                    <i class="material-icons">arrow_back</i>
+                </a>
+                <a href="javascript:void(0)" class="logo left">Контакты</a>
+                <ul class="right">
+                    <li class="normal-icon">
+                        <a href="javascript:void(0)" class="dropdown-button" data-activates="cold_contacts_menu">
+                            <i class="material-icons">more_vert</i>
+                        </a>
+                    </li>
+                    <li id="cold_contacts_selectall_btn" class="holded-icon" hidden>
+                        <a href="javascript:void(0)">
+                            <i class="material-icons">filter_none</i>
+                        </a>
+                    </li>
+                    <li id="cold_contacts_del_btn" class="holded-icon" hidden>
+                        <a href="javascript:void(0)">
+                            <i class="material-icons">delete</i>
+                        </a>
+                    </li>
+                    <li class="holded-icon unhold" hidden>
+                        <a href="javascript:void(0)">
+                            <i class="material-icons">done</i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <ul id="cold_contacts_list" class="collection"></ul>
+        <a id="cold_contacts_add_btn" class="btn-floating btn-large blue add-btn">
+            <i class="material-icons">add</i>
+        </a>
+    </div>
+    <div id="cold_contacts_edit_page" class="page" hidden>
+        <nav>
+            <div class="nav-wrapper blue">
+                <a href="javascript:void(0)" class="back-btn left back-to-cold-contacts">
+                    <i class="material-icons">arrow_back</i>
+                </a>
+                <a href="javascript:void(0)" class="logo left">Редактирование контакта</a>
+                <ul class="right">
+                    <li id="cold_contacts_save_edit_btn">
+                        <a href="javascript:void(0)">
+                            <i class="material-icons">done</i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <ul id="cold_contacts_edit_list" class="collection">
+            <li class="collection-item valign-wrapper">
+                <i class="material-icons list-icon">call</i>
+                <input id="cold_contacts_edit_phone" type="text" class="list-input" placeholder="Телефон">
+            </li>
+            <li class="collection-item valign-wrapper">
+                <i class="material-icons list-icon">person</i>
+                <input id="cold_contacts_edit_name" type="text" class="list-input" placeholder="Имя">
+            </li>
+        </ul>
+    </div>
+    <div id="cold_contacts_import_page" class="page" hidden>
+        <nav>
+            <div class="nav-wrapper blue">
+                <a href="javascript:void(0)" class="back-btn left back-to-cold-contacts">
+                    <i class="material-icons">arrow_back</i>
+                </a>
+                <a href="javascript:void(0)" class="logo left">Импорт контактов</a>
+                <ul class="right">
+                    <li id="cold_contacts_selectall_import_btn">
+                        <a href="javascript:void(0)">
+                            <i class="material-icons">filter_none</i>
+                        </a>
+                    </li>
+                    <li id="cold_contacts_save_import_btn">
+                        <a href="javascript:void(0)">
+                            <i class="material-icons">done</i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <ul id="cold_contacts_import_list" class="collection"></ul>
+    </div>
+    <div id="cold_contacts_add_page" class="page" hidden>
+        <nav>
+            <div class="nav-wrapper blue">
+                <a href="javascript:void(0)" class="back-btn left back-to-cold-contacts">
+                    <i class="material-icons">arrow_back</i>
+                </a>
+                <a href="javascript:void(0)" class="logo left">Создание контакта</a>
+                <ul class="right">
+                    <li id="cold_contacts_save_add_btn">
+                        <a href="javascript:void(0)">
+                            <i class="material-icons">done</i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <ul id="cold_contacts_add_list" class="collection">
+            <li class="collection-item valign-wrapper">
+                <i class="material-icons list-icon">call</i>
+                <input id="cold_contacts_add_phone" type="text" class="list-input" placeholder="Телефон">
+            </li>
+            <li class="collection-item valign-wrapper">
+                <i class="material-icons list-icon">person</i>
+                <input id="cold_contacts_add_name" type="text" class="list-input" placeholder="Имя">
+            </li>
+        </ul>
+    </div>
+    <div id="cold_journal_page" class="page" hidden>
+        <ul id="cold_journal_menu" class="dropdown-content dropdown-submenu">
+            <li onclick="showColdJournalDateRange()">
+                <a href="javascript:void(0)">За период</a>
+            </li>
+            <li onclick="showColdJournalCountInput()">
+                <a href="javascript:void(0)">По сколько</a>
+            </li>
+        </ul>
+        <nav>
+            <div class="nav-wrapper blue">
+                <a href="javascript:void(0)" class="back-btn left back-to-cold">
+                    <i class="material-icons">arrow_back</i>
+                </a>
+                <a href="javascript:void(0)" class="logo left">Журнал звонков</a>
+                <ul class="right">
+                    <li>
+                        <a href="javascript:void(0)" class="dropdown-button" data-activates="cold_journal_menu">
+                            <i class="material-icons">more_vert</i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <ul id="cold_journal_list" class="collection"></ul>
+    </div>
+    <div id="cold_journal_date_range_page" class="page" hidden>
+        <nav>
+            <div class="nav-wrapper blue">
+                <a href="javascript:void(0)" class="back-btn left back-to-cold-journal">
+                    <i class="material-icons">arrow_back</i>
+                </a>
+                <a href="javascript:void(0)" class="logo left">Выбор даты</a>
+            </div>
+        </nav>
+        <ul class="collection">
+            <li class="collection-item valign-wrapper">
+                <i class="material-icons list-icon">today</i>
+                <input id="cold_journal_date_range" type="text" class="list-input cold-datepicker" placeholder="Выберите дату">
+            </li>
+        </ul>
+    </div>
+    <div id="cold_journal_count_page" class="page" hidden>
+        <nav>
+            <div class="nav-wrapper blue">
+                <a href="javascript:void(0)" class="back-btn left back-to-cold-journal">
+                    <i class="material-icons">arrow_back</i>
+                </a>
+                <a href="javascript:void(0)" class="logo left">Количество записей</a>
+            </div>
+        </nav>
+        <ul class="collection">
+            <li class="collection-item valign-wrapper">
+                <i class="material-icons list-icon">reorder</i>
+                <input id="cold_journal_count" type="number" class="list-input" placeholder="Введите количество записей">
+            </li>
+        </ul>
+    </div>
+    <div id="cold_settings_page" class="page" hidden>
+        <nav>
+            <div class="nav-wrapper blue">
+                <a href="javascript:void(0)" class="back-btn left back-to-main">
+                    <i class="material-icons">arrow_back</i>
+                </a>
+                <a href="javascript:void(0)" class="logo left">Настройки</a>
+            </div>
+        </nav>
+        <ul id="cold_settings_menu" class="collection">
+            <li id="cold_settings_profile_choose" class="collection-item valign-wrapper">
+                <span class="menu-list-name">Профиль пользователя</span>
+                <i class="material-icons list-icon right-align">chevron_right</i>
+            </li>
+            <li id="cold_settings_service_choose" class="collection-item valign-wrapper">
+                <span class="menu-list-name">Настройки сервиса</span>
+                <i class="material-icons list-icon right-align">chevron_right</i>
+            </li>
+        </ul>
+    </div>
+    <div id="cold_settings_service_page" class="page" hidden>
+        <nav>
+            <div class="nav-wrapper blue">
+                <a href="javascript:void(0)" class="back-btn left back-to-cold-settings">
+                    <i class="material-icons">arrow_back</i>
+                </a>
+                <a href="javascript:void(0)" class="logo left">Настройки сервиса</a>
+                <ul class="right">
+                    <li id="save_cold_settings_service_btn">
+                        <a href="javascript:void(0)">
+                            <i class="material-icons">done</i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <ul id="cold_settings_service_menu" class="collection">
+            <li class="collection-item valign-wrapper">
+                <span class="list-name" style="height: 56px">Текст</span>
+                <textarea id="cold_settings_service_text" class="materialize-textarea settings-list-textarea" placeholder="Введите текст"></textarea>
+            </li>
+            <li class="collection-item valign-wrapper">
+                <span class="list-name">Повторных звонков</span>
+                <input id="cold_settings_service_retry_calls" class="settings-list-input" type="text" />
+            </li>
+            <li class="collection-item valign-wrapper">
+                <span class="list-name">Голос</span>
+                <select id="cold_settings_service_voice" class="settings-list-select">
+                    <option value="jane">jane</option>
+                    <option value="oksana">oksana</option>
+                    <option value="alyss">alyss</option>
+                    <option value="omazh">omazh</option>
+                    <option value="zahar">zahar</option>
+                    <option value="ermil">ermil</option>
+                </select>
+            </li>
+            <li class="collection-item valign-wrapper">
+                <span class="list-name">Прекратить обзвон в..</span>
+                <input id="cold_settings_service_reject_calls" class="settings-list-input" type="text" />
+            </li>
+            <li class="collection-item valign-wrapper">
+                <span class="list-name">Время начала</span>
+                <input id="cold_settings_service_start_time" class="settings-list-input" type="text" />
+            </li>
+            <li class="collection-item valign-wrapper">
+                <span class="list-name">Джингл</span>
+                <div class="select-jingle-block">
+                    <select id="cold_settings_service_jingle" class="jingle-select">
+                        <option value="jingle1.wav">Джингл 1</option>
+                        <option value="jingle2.wav">Джингл 2</option>
+                        <option value="jingle3.wav">Джингл 3</option>
+                        <option value="jingle4.wav">Джингл 4</option>
+                        <option value="jingle5.wav">Джингл 5</option>
+                        <option value="jingle6.wav">Джингл 6</option>
+                        <option value="jingle7.wav">Джингл 7</option>
+                        <option value="jingle8.wav">Джингл 8</option>
+                        <option value="jingle9.wav">Джингл 9</option>
+                        <option value="jingle10.wav">Джингл 10</option>
+                        <option value="jingle11.wav">Джингл 11</option>
+                        <option value="jingle12.wav">Джингл 12</option>
+                        <option value="jingle13.wav">Джингл 13</option>
+                    </select>
+                    <a id="cold_settings_service_jingle_play" class="btn-floating blue play-btn">
+                        <i class="material-icons">play_arrow</i>
+                    </a>
+                </div>
+            </li>
+            <li class="collection-item valign-wrapper">
+                <span class="list-name">Дата</span>
+                <select id="cold_settings_service_time_style" class="settings-list-select">
+                    <option value="0">Число</option>
+                    <option value="1">Каждый день</option>
+                    <option value="2">По дням недели</option>
+                </select>
+            </li>
+            <li class="collection-item valign-wrapper" id="cold_settings_service_start_date_li" hidden>
+                <span class="list-name">Выберите день</span>
+                <input id="cold_settings_service_start_date" class="settings-list-input" type="text" />
+            </li>
+            <li class="collection-item valign-wrapper" id="cold_settings_service_week_days_li" hidden>
+                <span class="list-name" style="height:56px">Дни недели</span>
+                <select id="cold_settings_service_week_days" class="settings-list-select" multiple>
+                    <option value="1">Понедельник</option>
+                    <option value="2">Вторник</option>
+                    <option value="3">Среда</option>
+                    <option value="4">Четверг</option>
+                    <option value="5">Пятница</option>
+                    <option value="6">Суббота</option>
+                    <option value="0">Воскресенье</option>
+                </select>
+            </li>
+            <li class="collection-item valign-wrapper">
+                <span class="list-name">Номер сервиса</span>
+                <input id="cold_settings_service_phone" class="settings-list-input" type="text" />
+            </li>
+            <li class="collection-item valign-wrapper">
+                <span class="list-name">Пароль номера</span>
+                <input id="cold_settings_service_phone_password" class="settings-list-input" type="password" />
+            </li>
+        </ul>
+        </ul>
+    </div>
+    <div id="cold_profile_page" class="page" hidden>
+        <nav>
+            <div class="nav-wrapper blue">
+                <a href="javascript:void(0)" class="back-btn left back-to-cold-settings">
+                    <i class="material-icons">arrow_back</i>
+                </a>
+                <a href="javascript:void(0)" class="logo left">Профиль пользователя</a>
+            </div>
+        </nav>
+        <ul id="cold_settings_profile" class="collection">
+            <li class="collection-item valign-wrapper">
+                <span class="list-name">Email</span>
+                <span id="cold_profile_email" class="list-name right-align"></span>
+            </li>
+        </ul>
+    </div>
+    <div id="gkh_current_page" class="page" hidden>
+        <nav>
+            <div class="nav-wrapper blue">
+                <a href="javascript:void(0)" class="back-btn left back-to-main">
+                    <i class="material-icons">arrow_back</i>
+                </a>
+                <a href="javascript:void(0)" class="logo left">ЖКХ ассистент</a>
+                <ul class="right">
+                    <li id="gkh_del_btn">
+                        <a href="javascript:void(0)">
+                            <i class="material-icons">delete</i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <ul id="gkh_menu" class="collection">
+            <li id="gkh_accounts_choose" class="collection-item valign-wrapper">
+                <i class="material-icons list-icon">account_balance</i>
+                <span class="menu-list-name">Лицевые счета</span>
+            </li>
+            <li id="gkh_meters_choose" class="collection-item valign-wrapper">
+                <i class="material-icons list-icon">explore</i>
+                <span class="menu-list-name">Счётчики</span>
+            </li>
+            <li id="gkh_journal_choose" class="collection-item valign-wrapper">
+                <i class="material-icons list-icon">view_list</i>
+                <span class="menu-list-name">Журнал звонков</span>
+            </li>
+            <li id="gkh_settings_choose" class="collection-item valign-wrapper">
+                <i class="material-icons list-icon">settings</i>
+                <span class="menu-list-name">Настройки</span>
+            </li>
+        </ul>
+    </div>
+    <div id="gkh_accounts_number_page" class="page" hidden>
+        <nav>
+            <div class="nav-wrapper blue">
+                <a href="javascript:void(0)" class="back-btn left back-to-gkh-accounts">
+                    <i class="material-icons">arrow_back</i>
+                </a>
+                <a href="javascript:void(0)" class="logo left">Поиск по номеру л/с</a>
+                <ul class="right">
+                    <li id="gkh_clear_accounts_number">
+                        <a href="javascript:void(0)">
+                            <i class="material-icons">clear</i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <ul class="collection">
+            <li class="collection-item valign-wrapper">
+                <i class="material-icons list-icon">portrait</i>
+                <input id="gkh_accounts_number_input" type="text" class="list-input" placeholder="Введите номер лицевого счёта">
+            </li>
+        </ul>
+    </div>
+    <div id="gkh_accounts_phone_page" class="page" hidden>
+        <nav>
+            <div class="nav-wrapper blue">
+                <a href="javascript:void(0)" class="back-btn left back-to-gkh-accounts">
+                    <i class="material-icons">arrow_back</i>
+                </a>
+                <a href="javascript:void(0)" class="logo left">Поиск по телефону</a>
+                <ul class="right">
+                    <li id="gkh_clear_accounts_phone">
+                        <a href="javascript:void(0)">
+                            <i class="material-icons">clear</i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <ul class="collection">
+            <li class="collection-item valign-wrapper">
+                <i class="material-icons list-icon">call</i>
+                <input id="gkh_accounts_phone_input" type="text" class="list-input" placeholder="Введите номер телефона">
+            </li>
+        </ul>
+    </div>
+    <div id="gkh_accounts_month_page" class="page" hidden>
+        <nav>
+            <div class="nav-wrapper blue">
+                <a href="javascript:void(0)" class="back-btn left back-to-gkh-accounts">
+                    <i class="material-icons">arrow_back</i>
+                </a>
+                <a href="javascript:void(0)" class="logo left">Поиск за месяц</a>
+                <ul class="right">
+                    <li id="gkh_clear_accounts_month">
+                        <a href="javascript:void(0)">
+                            <i class="material-icons">clear</i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <ul class="collection">
+            <li class="collection-item valign-wrapper">
+                <i class="material-icons list-icon">date_range</i>
+                <span class="list-name">Месяц</span>
+                <input id="gkh_accounts_month_input" type="month" class="gkh-datepicker settings-list-input" placeholder="Выберите месяц">
+            </li>
+        </ul>
+    </div>
+    <div id="gkh_meters_month_page" class="page" hidden>
+        <nav>
+            <div class="nav-wrapper blue">
+                <a href="javascript:void(0)" class="back-btn left back-to-gkh-meters">
+                    <i class="material-icons">arrow_back</i>
+                </a>
+                <a href="javascript:void(0)" class="logo left">Поиск за месяц</a>
+                <ul class="right">
+                    <li id="gkh_clear_meters_month">
+                        <a href="javascript:void(0)">
+                            <i class="material-icons">clear</i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <ul class="collection">
+            <li class="collection-item valign-wrapper">
+                <i class="material-icons list-icon">date_range</i>
+                <span class="list-name">Месяц</span>
+                <input id="gkh_meters_month_input" type="month" class="gkh-datepicker settings-list-input" placeholder="Выберите месяц">
+            </li>
+        </ul>
+    </div>
+    <div id="gkh_accounts_page" class="page" hidden>
+        <nav>
+            <ul id="gkh_accounts_menu" class="dropdown-content dropdown-submenu">
+                <li onclick="showGKHAccountsNumber()">
+                    <a href="javascript:void(0)">По номеру л/с</a>
+                </li>
+                <li onclick="showGKHAccountsPhone()">
+                    <a href="javascript:void(0)">По телефону</a>
+                </li>
+                <li onclick="showGKHAccountsMonth()">
+                    <a href="javascript:void(0)">За месяц</a>
+                </li>
+            </ul>
+            <div class="nav-wrapper blue">
+                <a href="javascript:void(0)" class="back-btn left back-to-gkh">
+                    <i class="material-icons">arrow_back</i>
+                </a>
+                <a href="javascript:void(0)" class="logo left">Лиц. счета</a>
+                <ul class="right">
+                    <li class="normal-icon">
+                        <a href="javascript:void(0)" class="dropdown-button" data-activates="gkh_accounts_menu">
+                            <i class="material-icons">more_vert</i>
+                        </a>
+                    </li>
+                    <li id="gkh_accounts_selectall_btn" class="holded-icon" hidden>
+                        <a href="javascript:void(0)">
+                            <i class="material-icons">filter_none</i>
+                        </a>
+                    </li>
+                    <li id="gkh_accounts_del_btn" class="holded-icon" hidden>
+                        <a href="javascript:void(0)">
+                            <i class="material-icons">delete</i>
+                        </a>
+                    </li>
+                    <li class="holded-icon unhold" hidden>
+                        <a href="javascript:void(0)">
+                            <i class="material-icons">done</i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <ul id="gkh_accounts_list" class="collection"></ul>
+    </div>
+    <div id="gkh_meters_page" class="page" hidden>
+        <nav>
+            <ul id="gkh_meters_menu" class="dropdown-content dropdown-submenu">
+                <!-- <li onclick="showGKHMetersNumber()"><a href="javascript:void(0)">По номеру л/с</a></li>
+                <li onclick="showGKHMetersPhone()"><a href="javascript:void(0)">По телефону</a></li> -->
+                <li onclick="showGKHMetersMonth()">
+                    <a href="javascript:void(0)">За месяц</a>
+                </li>
+            </ul>
+            <div class="nav-wrapper blue">
+                <a href="javascript:void(0)" class="back-btn left back-to-gkh">
+                    <i class="material-icons">arrow_back</i>
+                </a>
+                <a href="javascript:void(0)" class="logo left">Счётчики</a>
+                <ul class="right">
+                    <li class="normal-icon">
+                        <a href="javascript:void(0)" class="dropdown-button" data-activates="gkh_meters_menu">
+                            <i class="material-icons">more_vert</i>
+                        </a>
+                    </li>
+                    <li id="gkh_meters_selectall_btn" class="holded-icon" hidden>
+                        <a href="javascript:void(0)">
+                            <i class="material-icons">filter_none</i>
+                        </a>
+                    </li>
+                    <li id="gkh_meters_del_btn" class="holded-icon" hidden>
+                        <a href="javascript:void(0)">
+                            <i class="material-icons">delete</i>
+                        </a>
+                    </li>
+                    <li class="holded-icon unhold" hidden>
+                        <a href="javascript:void(0)">
+                            <i class="material-icons">done</i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <ul id="gkh_meters_list" class="collection"></ul>
+    </div>
+    <div id="gkh_accounts_edit_page" class="page" hidden>
+        <nav>
+            <div class="nav-wrapper blue">
+                <a href="javascript:void(0)" class="back-btn left back-to-gkh-accounts">
+                    <i class="material-icons">arrow_back</i>
+                </a>
+                <a href="javascript:void(0)" class="logo left">Редактирование л/с</a>
+                <ul class="right">
+                    <li id="gkh_accounts_save_edit_btn">
+                        <a href="javascript:void(0)">
+                            <i class="material-icons">done</i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <ul id="gkh_accounts_edit_list" class="collection">
+            <li class="collection-item valign-wrapper">
+                <i class="material-icons list-icon">portrait</i>
+                <span class="list-name">Номер л/с</span>
+                <input id="gkh_accounts_edit_number" type="text" class="settings-list-input" placeholder="Номер лицевого счёта">
+            </li>
+            <li class="collection-item valign-wrapper">
+                <i class="material-icons list-icon">call</i>
+                <span class="list-name">Телефон</span>
+                <input id="gkh_accounts_edit_phone" type="text" class="settings-list-input" placeholder="Телефон">
+            </li>
+            <li class="collection-item valign-wrapper">
+                <i class="material-icons list-icon">home</i>
+                <span class="list-name">Адрес</span>
+                <span id="gkh_accounts_edit_address" class="list-name address-span"></span>
+            </li>
+            <li class="collection-item valign-wrapper">
+                <i class="material-icons list-icon">payment</i>
+                <span class="list-name">Задолженность</span>
+                <span id="gkh_accounts_edit_debt" class="list-name right-align"></span>
+            </li>
+        </ul>
+    </div>
+    <div id="gkh_meters_edit_page" class="page" hidden>
+        <nav>
+            <div class="nav-wrapper blue">
+                <a href="javascript:void(0)" class="back-btn left back-to-gkh-meters">
+                    <i class="material-icons">arrow_back</i>
+                </a>
+                <a href="javascript:void(0)" class="logo left">Редактирование счётчика</a>
+                <ul class="right">
+                    <li id="gkh_meters_save_edit_btn">
+                        <a href="javascript:void(0)">
+                            <i class="material-icons">done</i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <ul id="gkh_meters_edit_list" class="collection">
+            <li class="collection-item valign-wrapper">
+                <span class="list-name">Наименование</span>
+                <input id="gkh_meters_edit_name" type="text" class="settings-list-input" placeholder="Наименование">
+            </li>
+            <li class="collection-item valign-wrapper">
+                <span class="list-name">Сервис</span>
+                <input id="gkh_meters_edit_service" type="text" class="settings-list-input" placeholder="Сервис">
+            </li>
+            <li class="collection-item valign-wrapper">
+                <span class="list-name">Тарифов</span>
+                <input id="gkh_meters_edit_values" type="number" min="1" max="3" class="settings-list-input" placeholder="Количество тарифов">
+            </li>
+            <li class="collection-item valign-wrapper">
+                <span class="list-name">Разрядов</span>
+                <input id="gkh_meters_edit_capacity" type="number" class="settings-list-input" placeholder="Количество разрядов">
+            </li>
+            <li class="collection-item valign-wrapper">
+                <span class="list-name">Дата выгрузки</span>
+                <input id="gkh_meters_edit_date" type="text" class="settings-list-input" placeholder="Дата выгрузки">
+            </li>
+            <li class="collection-item valign-wrapper">
+                <span class="list-name">Показание 1</span>
+                <input id="gkh_meters_edit_val1" type="text" class="settings-list-input" placeholder="Показание счётчика 1">
+            </li>
+            <li class="collection-item valign-wrapper">
+                <span class="list-name">Показание 2</span>
+                <input id="gkh_meters_edit_val2" type="text" class="settings-list-input" placeholder="Показание счётчика 2">
+            </li>
+            <li class="collection-item valign-wrapper">
+                <span class="list-name">Показание 3</span>
+                <input id="gkh_meters_edit_val3" type="text" class="settings-list-input" placeholder="Показание счётчика 3">
+            </li>
+        </ul>
+    </div>
+    <div id="gkh_journal_page" class="page" hidden>
+        <ul id="gkh_journal_menu" class="dropdown-content dropdown-submenu">
+            <li onclick="showGKHJournalDateRange()">
+                <a href="javascript:void(0)">За период</a>
+            </li>
+            <li onclick="showGKHJournalCountInput()">
+                <a href="javascript:void(0)">По сколько</a>
+            </li>
+        </ul>
+        <nav>
+            <div class="nav-wrapper blue">
+                <a href="javascript:void(0)" class="back-btn left back-to-gkh">
+                    <i class="material-icons">arrow_back</i>
+                </a>
+                <a href="javascript:void(0)" class="logo left">Журнал звонков</a>
+                <ul class="right">
+                    <li>
+                        <a href="javascript:void(0)" class="dropdown-button" data-activates="gkh_journal_menu">
+                            <i class="material-icons">more_vert</i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <ul id="gkh_journal_list" class="collection"></ul>
+    </div>
+    <div id="gkh_journal_date_range_page" class="page" hidden>
+        <nav>
+            <div class="nav-wrapper blue">
+                <a href="javascript:void(0)" class="back-btn left back-to-gkh-journal">
+                    <i class="material-icons">arrow_back</i>
+                </a>
+                <a href="javascript:void(0)" class="logo left">Выбор даты</a>
+            </div>
+        </nav>
+        <ul class="collection">
+            <li class="collection-item valign-wrapper">
+                <i class="material-icons list-icon">today</i>
+                <input id="gkh_journal_date_range" type="text" class="list-input gkh-datepicker" placeholder="Выберите дату">
+            </li>
+        </ul>
+    </div>
+    <div id="gkh_journal_count_page" class="page" hidden>
+        <nav>
+            <div class="nav-wrapper blue">
+                <a href="javascript:void(0)" class="back-btn left back-to-gkh-journal">
+                    <i class="material-icons">arrow_back</i>
+                </a>
+                <a href="javascript:void(0)" class="logo left">Количество записей</a>
+            </div>
+        </nav>
+        <ul class="collection">
+            <li class="collection-item valign-wrapper">
+                <i class="material-icons list-icon">reorder</i>
+                <input id="gkh_journal_count" type="number" class="list-input" placeholder="Введите количество записей">
+            </li>
+        </ul>
+    </div>
+    <div id="gkh_settings_page" class="page" hidden>
+        <nav>
+            <div class="nav-wrapper blue">
+                <a href="javascript:void(0)" class="back-btn left back-to-gkh">
+                    <i class="material-icons">arrow_back</i>
+                </a>
+                <a href="javascript:void(0)" class="logo left">Настройки</a>
+            </div>
+        </nav>
+        <ul id="gkh_settings_menu" class="collection">
+            <li id="gkh_settings_profile_choose" class="collection-item valign-wrapper">
+                <span class="menu-list-name">Профиль пользователя</span>
+                <i class="material-icons list-icon right-align">chevron_right</i>
+            </li>
+            <li id="gkh_settings_phones_choose" class="collection-item valign-wrapper">
+                <span class="menu-list-name">Настройки телефонов</span>
+                <i class="material-icons list-icon right-align">chevron_right</i>
+            </li>
+            <li id="gkh_settings_autocalls" class="collection-item valign-wrapper">
+                <span class="menu-list-name">Автообзвон</span>
+                <i class="material-icons list-icon right-align">chevron_right</i>
+            </li>
+            <li id="gkh_settings_accept_data" class="collection-item valign-wrapper">
+                <span class="menu-list-name">Приём показаний</span>
+                <i class="material-icons list-icon right-align">chevron_right</i>
+            </li>
+        </ul>
+    </div>
+    <div id="gkh_profile_page" class="page" hidden>
+        <nav>
+            <div class="nav-wrapper blue">
+                <a href="javascript:void(0)" class="back-btn left back-to-gkh-settings">
+                    <i class="material-icons">arrow_back</i>
+                </a>
+                <a href="javascript:void(0)" class="logo left">Профиль пользователя</a>
+            </div>
+        </nav>
+        <ul id="gkh_settings_menu" class="collection">
+            <li class="collection-item valign-wrapper">
+                <span class="list-name">Email</span>
+                <span id="gkh_profile_email" class="list-name right-align"></span>
+            </li>
+            <li class="collection-item valign-wrapper">
+                <span class="list-name">Логин</span>
+                <span id="gkh_profile_login" class="list-name right-align"></span>
+            </li>
+            <li class="collection-item valign-wrapper">
+                <span class="list-name">Нераспределённое время</span>
+                <span id="gkh_profile_unallocated_time" class="list-name right-align"></span>
+            </li>
+        </ul>
+    </div>
+    <div id="gkh_phones_settings_page" class="page" hidden>
+        <nav>
+            <div class="nav-wrapper blue">
+                <a href="javascript:void(0)" class="back-btn left back-to-gkh-settings">
+                    <i class="material-icons">arrow_back</i>
+                </a>
+                <a href="javascript:void(0)" class="logo left">Телефоны</a>
+                <ul class="right">
+                    <li id="gkh_phones_selectall_btn" class="holded-icon" hidden>
+                        <a href="javascript:void(0)">
+                            <i class="material-icons">filter_none</i>
+                        </a>
+                    </li>
+                    <li id="gkh_phones_del_btn" class="holded-icon" hidden>
+                        <a href="javascript:void(0)">
+                            <i class="material-icons">delete</i>
+                        </a>
+                    </li>
+                    <li class="holded-icon unhold" hidden>
+                        <a href="javascript:void(0)">
+                            <i class="material-icons">done</i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <ul id="gkh_phones_list" class="collection"></ul>
+        <a id="gkh_phones_add_btn" class="btn-floating btn-large blue add-btn">
+            <i class="material-icons">add</i>
+        </a>
+    </div>
+    <div id="gkh_phones_edit_page" class="page" hidden>
+        <nav>
+            <div class="nav-wrapper blue">
+                <a href="javascript:void(0)" class="back-btn left back-to-gkh-phones">
+                    <i class="material-icons">arrow_back</i>
+                </a>
+                <a href="javascript:void(0)" class="logo left">Настройки телефона</a>
+                <ul class="right">
+                    <li id="save_gkh_phones_add_time_btn">
+                        <a href="javascript:void(0)">
+                            <i class="material-icons">done</i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <ul id="gkh_phone_menu_list" class="collection">
+            <li class="collection-item valign-wrapper">
+                <span class="list-name">Телефон</span>
+                <span id="gkh_phone_edit_phone" class="list-name right-align"></span>
+            </li>
+            <li class="collection-item valign-wrapper">
+                <span class="list-name">Добавить секунд</span>
+                <input id="gkh_add_time_input" min="0" class="settings-list-input" type="number" onkeyup="isright(this);" />
+            </li>
+            <li class="collection-item valign-wrapper">
+                <span class="list-name">Автообзвон</span>
+                <div class="switch right-align">
+                    <label>
+                        <input id="gkh_phone_autocalls_toggle" type="checkbox">
+                        <span class="lever"></span>
+                    </label>
+                </div>
+            </li>
+            <li class="collection-item valign-wrapper">
+                <span class="list-name">Приём показаний</span>
+                <div class="switch right-align">
+                    <label>
+                        <input id="gkh_phone_accept_data_toggle" type="checkbox">
+                        <span class="lever"></span>
+                    </label>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <div id="gkh_autocall_settings_page" class="page" hidden>
+        <nav>
+            <div class="nav-wrapper blue">
+                <a href="javascript:void(0)" class="back-btn left back-to-gkh-settings">
+                    <i class="material-icons">arrow_back</i>
+                </a>
+                <a href="javascript:void(0)" class="logo left">Автообзвон</a>
+                <ul class="right">
+                    <li id="save_gkh_autocall_settings_btn">
+                        <a href="javascript:void(0)">
+                            <i class="material-icons">done</i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <ul id="gkh_autocall_settings_menu" class="collection">
+            <li class="collection-item valign-wrapper">
+                <span class="list-name">Время начала</span>
+                <input id="gkh_autocall_settings_start_time" class="settings-list-input" type="time" />
+            </li>
+            <li class="collection-item valign-wrapper">
+                <span class="list-name">Повторных звонков</span>
+                <input id="gkh_autocall_settings_retry_calls" class="settings-list-input" max="4" min="0" type="number" />
+            </li>
+            <li class="collection-item valign-wrapper">
+                <span class="list-name">Прекратить обзвон</span>
+                <input id="gkh_autocall_settings_reject_calls" class="settings-list-input" type="time" />
+            </li>
+            <li class="collection-item valign-wrapper menu-textarea">
+                <span class="list-name">Текст</span>
+                <textarea id="gkh_autocall_settings_text" class="materialize-textarea settings-list-textarea"></textarea>
+            </li>
+            <li class="collection-item valign-wrapper">
+                <span class="list-name">Голос</span>
+                <select id="gkh_autocall_settings_voice" class="settings-list-select">
+                    <option value="jane">jane</option>
+                    <option value="oksana">oksana</option>
+                    <option value="alyss">alyss</option>
+                    <option value="omazh">omazh</option>
+                    <option value="zahar">zahar</option>
+                    <option value="ermil">ermil</option>
+                </select>
+            </li>
+            <li class="collection-item valign-wrapper">
+                <span class="list-name">Дата</span>
+                <select id="gkh_autocall_settings_time_style" class="settings-list-select">
+                    <option value="0">Число</option>
+                    <option value="1">Каждый день</option>
+                    <option value="2">По дням недели</option>
+                </select>
+            </li>
+            <li class="collection-item valign-wrapper" id="gkh_autocall_settings_start_date_li" hidden>
+                <span class="list-name">Выберите день</span>
+                <input id="gkh_autocall_settings_start_date" class="settings-list-input" type="text" />
+            </li>
+            <li class="collection-item valign-wrapper" id="gkh_autocall_settings_week_days_li" hidden>
+                <span class="list-name">Дни недели</span>
+                <select id="gkh_autocall_settings_week_days" class="settings-list-select" multiple>
+                    <option value="1">Понедельник</option>
+                    <option value="2">Вторник</option>
+                    <option value="3">Среда</option>
+                    <option value="4">Четверг</option>
+                    <option value="5">Пятница</option>
+                    <option value="6">Суббота</option>
+                    <option value="0">Воскресенье</option>
+                </select>
+            </li>
+        </ul>
+    </div>
+    <div id="gkh_accept_data_settings_page" class="page" hidden>
+        <nav>
+            <div class="nav-wrapper blue">
+                <a href="javascript:void(0)" class="back-btn left back-to-gkh-settings">
+                    <i class="material-icons">arrow_back</i>
+                </a>
+                <a href="javascript:void(0)" class="logo left">Приём показаний</a>
+                <ul class="right">
+                    <li id="save_gkh_accept_data_settings_btn">
+                        <a href="javascript:void(0)">
+                            <i class="material-icons">done</i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <ul id="gkh_accept_data_settings_menu" class="collection">
+            <li class="collection-item valign-wrapper menu-textarea">
+                <span class="list-name">Приветствие</span>
+                <textarea id="gkh_accept_data_settings_hello_text" class="materialize-textarea settings-list-textarea"></textarea>
+            </li>
+            <li class="collection-item valign-wrapper menu-textarea">
+                <span class="list-name">Ввод лицевого счёта</span>
+                <textarea id="gkh_accept_data_settings_ls_message" class="materialize-textarea settings-list-textarea"></textarea>
+            </li>
+            <li class="collection-item valign-wrapper menu-textarea">
+                <span class="list-name">Ввод показаний</span>
+                <textarea id="gkh_accept_data_settings_meter_message" class="materialize-textarea settings-list-textarea"></textarea>
+            </li>
+            <li class="collection-item valign-wrapper menu-textarea">
+                <span class="list-name">Прощание</span>
+                <textarea id="gkh_accept_data_settings_good_buy_text" class="materialize-textarea settings-list-textarea"></textarea>
+            </li>
+            <li class="collection-item valign-wrapper">
+                <span class="list-name">Голос</span>
+                <select id="gkh_accept_data_settings_voice" class="settings-list-select">
+                    <option value="jane">jane</option>
+                    <option value="oksana">oksana</option>
+                    <option value="alyss">alyss</option>
+                    <option value="omazh">omazh</option>
+                    <option value="zahar">zahar</option>
+                    <option value="ermil">ermil</option>
+                </select>
+            </li>
+        </ul>
+    </div>
+    <div id="softphone_call_page" class="page" hidden>
+        <div id="outgoingCall_Form" class="outform">
+            <img id="outform_avatar" class="outform-avatar">
+            <span id="calledName" class="outform-called-name"></span>
+            <span id="statusCall" class="outform-status">Исходящий вызов</span>
+            <span id="call_timer" class="outform-timer"></span>
+            <div id="buttons_block" class="center">
+                <ul id="out_buttons1" class="outform-buttons">
+                    <li id="out_mic_off">
+                        <a class="btn-floating btn-large blue">
+                            <img src="img/mic-off.png">
+                        </a>
+                    </li>
+                    <li id="out_volume_mute">
+                        <a class="btn-floating btn-large blue">
+                            <img src="img/speaker-off.png">
+                        </a>
+                    </li>
+                    <li id="out_videocam">
+                        <a class="btn-floating btn-large blue">
+                            <img src="img/video.png">
+                        </a>
+                    </li>
+                </ul>
+                <ul id="out_buttons2" class="outform-buttons">
+                    <li id="out_message">
+                        <a class="btn-floating btn-large blue">
+                            <img src="img/chat.png">
+                        </a>
+                    </li>
+                    <li id="out_dtmf">
+                        <a class="btn-floating btn-large blue">
+                            <img src="img/numpad.png">
+                        </a>
+                    </li>
+                </ul>
+                <div class="center_div">
+                    <a class=" out_call_end btn-floating btn-large red center">
+                        <img src="img/endcall.png">
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div id="out_dtmf_page" class="dtmf-page" hidden>
+            <div class="row">
+                <div class="col s10">
+                    <input id="dtmf_number" type="text" class="input">
+                </div>
+                <div class="col s2 delnumbers">
+                    <p>
+                        <a href="javascript:void(0)">
+                            <img src="img/backspace.png" alt="backspace" id="delnumbers_dtmf">
+                        </a>
+                    </p>
+                </div>
+                <form class="softphone-dtmf">
+                    <div class="dialerrow">
+                        <a href="javascript:void(0)" id="dtmf_but_1" class="btn-large dialer">1</a>
+                        <a href="javascript:void(0)" id="dtmf_but_2" class="btn-large dialer">2</a>
+                        <a href="javascript:void(0)" id="dtmf_but_3" class="btn-large dialer">3</a>
+                    </div>
+                    <div>
+                        <a href="javascript:void(0)" id="dtmf_but_4" class="btn-large dialer">4</a>
+                        <a href="javascript:void(0)" id="dtmf_but_5" class="btn-large dialer">5</a>
+                        <a href="javascript:void(0)" id="dtmf_but_6" class="btn-large dialer">6</a>
+                    </div>
+                    <div>
+                        <a href="javascript:void(0)" id="dtmf_but_7" class="btn-large dialer">7</a>
+                        <a href="javascript:void(0)" id="dtmf_but_8" class="btn-large dialer">8</a>
+                        <a href="javascript:void(0)" id="dtmf_but_9" class="btn-large dialer">9</a>
+                    </div>
+                    <div>
+                        <a href="javascript:void(0)" id="dtmf_but_star" class="btn-large dialer">*</a>
+                        <a href="javascript:void(0)" id="dtmf_but_0" class="btn-large dialer">0</a>
+                        <a href="javascript:void(0)" id="dtmf_but_lettice" class="btn-large dialer">#</a>
+                    </div>
+                    <div>
+                        <a id="dtmf_collapse_btn" class="blue btn-large call-btn">
+                            <i class="material-icons left">dialpad</i>
+                            Свернуть
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div id="softphone_incoming_call_page" class="page" hidden>
+        <div id="incomingCall_Form" class="outform">
+            <img id="incoming_avatar" class="outform-avatar">
+            <span id="incoming_calledName" class="outform-called-name"></span>
+            <span id="incoming_statusCall" class="outform-status">Входящий вызов</span>
+            <span id="incoming_call_timer" class="outform-timer"></span>
+            <div id="incoming_buttons_block" class="center">
+                <ul class="incomingform-buttons">
+                    <li>
+                        <a id="incoming_call_end" class="btn">
+                            <i class="material-icons left">call_end</i>Отклонить</a>
+                        </a>
+                    </li>
+                    <li>
+                        <a id="incoming_call_on" class="btn">
+                            <i class="material-icons right">call</i>Принять</a>
+                    </li>
+                </ul>
+            </div>
+            <div id="buttons_on_accepted" class="center" hidden>
+                <ul id="inc_buttons1" class="outform-buttons">
+                    <li id="inc_mic_off">
+                        <a class="btn-floating btn-large blue">
+                            <img src="img/mic-off.png">
+                        </a>
+                    </li>
+                    <li id="inc_volume_mute">
+                        <a class="btn-floating btn-large  blue">
+                            <img src="img/speaker-off.png">
+                        </a>
+                    </li>
+                    <li id="inc_videocam">
+                        <a class="btn-floating btn-large blue">
+                            <img src="img/video.png">
+                        </a>
+                    </li>
+                </ul>
+                <ul id="inc_buttons2" class="outform-buttons">
+                    <li id="inc_message" class="">
+                        <a class="btn-floating btn-large blue">
+                            <img src="img/chat.png">
+                        </a>
+                    </li>
+                    <li id="inc_dtmf">
+                        <a class="btn-floating btn-large blue">
+                            <img src="img/numpad.png">
+                        </a>
+                    </li>
+                </ul>
+                <div class="center_div">
+                    <a class="out_call_end btn-floating btn-large red center">
+                        <img src="img/endcall.png">
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div id="inc_dtmf_page" class="dtmf-page" hidden>
+            <div class="row">
+                <div class="col s10">
+                    <input id="inc_dtmf_number" type="text" class="input">
+                </div>
+                <div class="col s2 delnumbers">
+                    <p>
+                        <a href="javascript:void(0)">
+                            <img src="img/backspace.png" alt="backspace" id="inc_delnumbers_dtmf">
+                        </a>
+                    </p>
+                </div>
+                <form class="inc_softphone-dtmf">
+                    <div class="dialerrow">
+                        <a href="javascript:void(0)" id="inc_dtmf_but_1" class="btn-large dialer">1</a>
+                        <a href="javascript:void(0)" id="inc_dtmf_but_2" class="btn-large dialer">2</a>
+                        <a href="javascript:void(0)" id="inc_dtmf_but_3" class="btn-large dialer">3</a>
+                    </div>
+                    <div>
+                        <a href="javascript:void(0)" id="inc_dtmf_but_4" class="btn-large dialer">4</a>
+                        <a href="javascript:void(0)" id="inc_dtmf_but_5" class="btn-large dialer">5</a>
+                        <a href="javascript:void(0)" id="inc_dtmf_but_6" class="btn-large dialer">6</a>
+                    </div>
+                    <div>
+                        <a href="javascript:void(0)" id="inc_dtmf_but_7" class="btn-large dialer">7</a>
+                        <a href="javascript:void(0)" id="inc_dtmf_but_8" class="btn-large dialer">8</a>
+                        <a href="javascript:void(0)" id="inc_dtmf_but_9" class="btn-large dialer">9</a>
+                    </div>
+                    <div>
+                        <a href="javascript:void(0)" id="inc_dtmf_but_star" class="btn-large dialer">*</a>
+                        <a href="javascript:void(0)" id="inc_dtmf_but_0" class="btn-large dialer">0</a>
+                        <a href="javascript:void(0)" id="inc_dtmf_but_lettice" class="btn-large dialer">#</a>
+                    </div>
+                    <div>
+                        <a id="inc_dtmf_collapse_btn" class="blue btn-large call-btn">
+                            <i class="material-icons left">dialpad</i>
+                            Свернуть
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    </div>
+    </div>
+    <div id="softphone_chat_page" hidden>
+        <nav>
+            <div class="nav-wrapper blue">
+                <a href="javascript:void(0)" class="back-btn left back-to-softphone-last-page">
+                    <i class="material-icons">arrow_back</i>
+                </a>
+                <a href="javascript:void(0)" id="name_chat_page" class="logo left">Имя контакта</a>
+                <ul class="right">
+                    <li id="call_from_chat">
+                        <a href="javascript:void(0)">
+                            <i class="material-icons">call</i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <div class="histform_table">
+            <table>
+                <tbody id="chat_table"></tbody>
+            </table>
+        </div>
+        <form class="s10">
+            <div class="row chat_input">
+                <div class="input-field col s10">
+                    <textarea id="chat_input" class="materialize-textarea" placeholder="Введите сообщение"></textarea>
+                </div>
+                <a id="chat_send_btn" class="btn-floating btn-large orange">
+                    <i class="material-icons">send</i>
+                </a>
+            </div>
+        </form>
+    </div>
+    </div>
+    <audio id="player" src="" hidden></audio>
+    <!-- <script type="text/javascript" src="js/cordova.js"></script> -->
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/hammer.js"></script>
+    <script type="text/javascript" src="js/jquery.hammer.js"></script>
+    <script type="text/javascript" src="js/taphold.js"></script>
+    <script type="text/javascript" src="js/html2canvas.js"></script>
+    <script type="text/javascript" src="js/G711.js"></script>
+    <script type="text/javascript" src="js/resampler.js"></script>
+    <script type="text/javascript" src="js/sip-0.7.6.js"></script>
+    <script type="text/javascript" src="js/timer.js"></script>
+    <script type="text/javascript" src="js/materialize.min.js"></script>
+    <script type="text/javascript" src="js/index.js"></script>
+
+</body>
+
+</html>
