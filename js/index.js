@@ -1091,7 +1091,7 @@ function createNewSessionUI(uri, session, message) {
             pause();
             var stream = session.getRemoteStreams() || this.mediaHandler.getRemoteStreams()[0];
             // console.log(stream);
-            var audioContext = new (window.AudioContext || window.webKitAudioContext)(); // Our audio context
+            // var audioContext = new (window.AudioContext || window.webKitAudioContext)(); // Our audio context
             // console.log(audioContext);
             var source = null;
 
@@ -1181,7 +1181,9 @@ function createNewSessionUI(uri, session, message) {
             var playAudioData = new Float32Array(0);
             var audioContext, context, audioInput, filter, recorder, recording;
             audioContext = window.AudioContext || window.webkitAudioContext;
-            context = new audioContext();
+            window.instanceAudioContext = window.instanceAudioContext || new audioContext();
+            context = window.instanceAudioContext;
+            // context = new audioContext();
             
             function Float32Concat(first, second) {
                 var firstLength = first.length,
@@ -1221,6 +1223,7 @@ function createNewSessionUI(uri, session, message) {
 
                 buffer = converPcmuToFloat32(raw)
                 playBuffer(buffer);
+
                 // console.log('Incoming raw: ', raw, ' lenght ', raw.length);
                 // if (data.length) {
                 //     if (data.length > 400) {

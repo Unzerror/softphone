@@ -13355,30 +13355,44 @@
             }
 
             if (navigator.getUserMedia) {
+              if (window.instanceAudioContext && window.instanceLocalMediaStream) {
+                return success();
+              }
+
               navigator.getUserMedia({
                   audio: true
               }, success, function (e) {
                   alert('Error capturing audio.');
               });
-          } else {
-              alert('getUserMedia not supported in this browser.');
-          }
+            } else {
+                alert('getUserMedia not supported in this browser.');
+            }
           
           function success(e) {
+              console.log('success ', e);
+              window.instanceLocalMediaStream = window.instanceLocalMediaStream || e;
               audioContext = window.AudioContext || window.webkitAudioContext;
-              context = new audioContext();
+              window.instanceAudioContext = window.instanceAudioContext || new audioContext();
+              context = window.instanceAudioContext;
               recording = false;
               filter = context.createBiquadFilter();
               filter.type = 'lowpass';
               filter.frequency.value = sampleRate / 2;
-              audioInput = context.createMediaStreamSource(e);
+              audioInput = context.createMediaStreamSource(window.instanceLocalMediaStream);
               recorder = context.createScriptProcessor(micBufferSize, 1, 1);
           
               var resamplerObj = new Resampler(context.sampleRate, sampleRate, 1, micBufferSize, false);
               recorder.onaudioprocess = function (audioEvents) {
+                console.log('********** onaudioprocess self.session.channelClose ', self.session.channelClose);
+
                 if (self.session.channelClose) {
-                  audioInput.disconnect(recorder);
+                  console.log('********** Отвязываем');
+                  audioInput.disconnect(filter);
+                  filter.disconnect(recorder);
                   recorder.disconnect(context.destination);
+
+                  // audioInput.disconnect(recorder);
+                  // recorder.disconnect(context.destination);
                   return;
                 } else {
                   var micBuffer;
