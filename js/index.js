@@ -1094,68 +1094,75 @@ function createNewSessionUI(uri, session, message) {
             var audioContext = new (window.AudioContext || window.webKitAudioContext)(); // Our audio context
             // console.log(audioContext);
             var source = null;
-            function converPcmuToFloat32(buffer) {
-                var l = buffer.length;
-                var floatBuffer = new Float32Array(l);
-                //pcmu => Float
-                for (var i = 0; i < l; i++)
-                    floatBuffer[i] = (g711.ulaw2linear(buffer[i])) / 0x7FFF;
-                // console.log(floatBuffer)
-                return floatBuffer;
-            }
-            function converFloat32ToPcmu(buffer) {
-                var l = buffer.length;
-                var buf = [];//new Int8Array(l);
-                while (l--) {
-                    buf[l] = g711.linear2ulaw(buffer[l] * 0xFFFF); //convert to pcmu
-                }
-                return buf;//.buffer
-            }
-            var counter = 0;
-            var tmp_buffer = new Float32Array(0);
-            function Float32Concat(first, second) {
-                var firstLength = first.length,
-                    result = new Float32Array(firstLength + second.length);
-                result.set(first);
-                result.set(second, firstLength);
-                return result;
-            }
-            function int16ToFloat32(inputArray, startIndex, length) {
-                var output = new Float32Array(inputArray.length - startIndex);
-                for (var i = startIndex; i < length; i++) {
-                    var int = inputArray[i];
-                    // If the high bit is on, then it is a negative number, and actually counts backwards.
-                    var float = (int >= 0x8000) ? -(0x10000 - int) / 0x8000 : int / 0x7FFF;
-                    output[i] = float;
-                }
-                return output;
-            }
-            function arrayBufferToString(buffer) {
-                var arr = new Uint8Array(buffer);
-                var str = String.fromCharCode.apply(String, arr);
-                return str;
-            }
-            function playsound(buffer) {
-                var context = audioContext;
-                window.gainNode = audioContext.createGain();
-                tmp_buffer = Float32Concat(tmp_buffer, buffer);
-                counter++;
-                if (counter == 8) {
-                    if (displayName == "MARS") {
-                        var src = context.createBufferSource(), audioBuffer = context.createBuffer(1, tmp_buffer.length, 4000);
-                    } else {
-                        var src = context.createBufferSource(), audioBuffer = context.createBuffer(1, tmp_buffer.length, 8000);
-                    }
-                    audioBuffer.getChannelData(0).set(tmp_buffer);
-                    src.buffer = audioBuffer;
-                    src.connect(gainNode);
-                    gainNode.connect(context.destination);
-                    src.connect(context.destination);
-                    src.start(0);
-                    counter = 0;
-                    tmp_buffer = new Float32Array(0);
-                }
-            }
+
+            // function converPcmuToFloat32(buffer) {
+            //     //var bufferView = new DataView(arrayBuffer);
+            //     var l = buffer.length;
+            //     var floatBuffer = new Float32Array(l);
+        
+            //     //pcmu => Float
+            //     for (var i = 0; i < l; i++)
+            //         floatBuffer[i] = (g711.ulaw2linear(buffer.readUInt8(i))) / 0x7FFF;
+            //     return floatBuffer;
+            // }
+
+            // function converFloat32ToPcmu(buffer) {
+            //     var l = buffer.length;
+            //     var buf = [];//new Int8Array(l);
+            //     while (l--) {
+            //         buf[l] = g711.linear2ulaw(buffer[l] * 0xFFFF); //convert to pcmu
+            //     }
+            //     return buf;//.buffer
+            // }
+            // var counter = 0;
+            // var tmp_buffer = new Float32Array(0);
+            // function Float32Concat(first, second) {
+            //     var firstLength = first.length,
+            //         result = new Float32Array(firstLength + second.length);
+            //     result.set(first);
+            //     result.set(second, firstLength);
+            //     return result;
+            // }
+            // function int16ToFloat32(inputArray, startIndex, length) {
+            //     var output = new Float32Array(inputArray.length - startIndex);
+            //     for (var i = startIndex; i < length; i++) {
+            //         var int = inputArray[i];
+            //         // If the high bit is on, then it is a negative number, and actually counts backwards.
+            //         var float = (int >= 0x8000) ? -(0x10000 - int) / 0x8000 : int / 0x7FFF;
+            //         output[i] = float;
+            //     }
+            //     return output;
+            // }
+            // function arrayBufferToString(buffer) {
+            //     var arr = new Uint8Array(buffer);
+            //     var str = String.fromCharCode.apply(String, arr);
+            //     return str;
+            // }
+            // function playsound(buffer) {
+            //     var context = audioContext;
+            //     window.gainNode = audioContext.createGain();
+            //     tmp_buffer = Float32Concat(tmp_buffer, buffer);
+            //     counter++;
+            //     if (counter == 8) {
+            //         if (displayName == "MARS") {
+            //             var src = context.createBufferSource(), audioBuffer = context.createBuffer(1, tmp_buffer.length, 4000);
+            //         } else {
+            //             var src = context.createBufferSource(), audioBuffer = context.createBuffer(1, tmp_buffer.length, 8000);
+            //         }
+            //         audioBuffer.getChannelData(0).set(tmp_buffer);
+            //         src.buffer = audioBuffer;
+            //         src.connect(gainNode);
+            //         gainNode.connect(context.destination);
+            //         src.connect(context.destination);
+            //         src.start(0);
+            //         counter = 0;
+            //         tmp_buffer = new Float32Array(0);
+            //     }
+            // }
+
+            var playAudioData = new Float32Array(0);
+            var sampleRate = 8000;
+
             function download(filename, data) {
                 var a = document.createElement('a');
                 var blob = new Blob([data], { 'type': 'audio/wav' });
@@ -1170,25 +1177,68 @@ function createNewSessionUI(uri, session, message) {
                     a.click();
                 }
             }
+
+            var playAudioData = new Float32Array(0);
+            var audioContext, context, audioInput, filter, recorder, recording;
+            audioContext = window.AudioContext || window.webkitAudioContext;
+            context = new audioContext();
+            
+            function Float32Concat(first, second) {
+                var firstLength = first.length,
+                    result = new Float32Array(firstLength + second.length);
+                result.set(first);
+                result.set(second, firstLength);
+                return result;
+            }
+
+            function converPcmuToFloat32(buffer) {
+                //var bufferView = new DataView(arrayBuffer);
+                var l = buffer.length;
+                var floatBuffer = new Float32Array(l);
+            
+                //pcmu => Float
+                for (var i = 0; i < l; i++)
+                    floatBuffer[i] = (g711.ulaw2linear(buffer[i])) / 0x7FFF;
+                return floatBuffer;
+            }
+
+            function playBuffer(obj) {
+                playAudioData = Float32Concat(playAudioData, obj);
+            
+                var audioBuffer = context.createBuffer(1, playAudioData.length, sampleRate);
+                audioBuffer.getChannelData(0).set(obj);
+                var source = context.createBufferSource();
+                source.buffer = audioBuffer;
+                source.connect(context.destination);
+                source.start();
+            };
+
             stream.on("data", function (data) {
-                console.log(data);
                 var raw, buffer;
-                if (data.length) {
-                    if (data.length > 400) {
-                        raw = new Uint16Array(data.buffer)
-                    }
-                    else {
-                        raw = data;
-                    }
-                } else {
-                    raw = new Uint16Array(data)
-                }
-                if (raw.length > 400) {
-                    buffer = int16ToFloat32(raw, 0, raw.length);
-                } else {
-                    buffer = converPcmuToFloat32(raw)
-                }
-                playsound(buffer);
+                raw = data;
+
+                console.log('Incoming raw: ', raw);
+
+                buffer = converPcmuToFloat32(raw)
+                playBuffer(buffer);
+                // console.log('Incoming raw: ', raw, ' lenght ', raw.length);
+                // if (data.length) {
+                //     if (data.length > 400) {
+                //         raw = new Uint16Array(data.buffer)
+                //     }
+                //     else {
+                //         raw = data;
+                //     }
+                // } else {
+                //     raw = new Uint16Array(data)
+                // }
+                // if (raw.length > 400) {
+                    // buffer = int16ToFloat32(raw, 0, raw.length);
+                // } else {
+                    // buffer = converPcmuToFloat32(raw)
+                    // playBuffer(buffer);
+                // }
+                // playsound(buffer);
             })
 
         });
@@ -4397,3 +4447,149 @@ function html2canvas(e) {
     }
 }
 ; window.onload = init();
+
+
+
+
+// var audioContext2 = new (window.AudioContext || window.webKitAudioContext)(); // Our audio context
+
+// var counter = 0;
+// var tmp_buffer = new Float32Array(0);
+
+// function Float32Concat(first, second) {
+//     var firstLength = first.length,
+//         result = new Float32Array(firstLength + second.length);
+//     result.set(first);
+//     result.set(second, firstLength);
+//     return result;
+// }
+
+// function playsound(buffer) {
+//     var context = audioContext2;
+//     window.gainNode = audioContext2.createGain();
+//     tmp_buffer = Float32Concat(tmp_buffer, buffer);
+//     counter++;
+//     // if (counter == 8) {
+//         // if (displayName == "MARS") {
+//             // var src = context.createBufferSource(), audioBuffer = context.createBuffer(1, tmp_buffer.length, 4000);
+//         // } else {
+//             var src = context.createBufferSource(), audioBuffer = context.createBuffer(1, tmp_buffer.length, 8000);
+//         // }
+//         audioBuffer.getChannelData(0).set(tmp_buffer);
+//         src.buffer = audioBuffer;
+//         src.connect(gainNode);
+//         gainNode.connect(context.destination);
+//         src.connect(context.destination);
+//         src.start(0);
+//         counter = 0;
+//         tmp_buffer = new Float32Array(0);
+//     // }
+// }
+
+
+
+
+
+
+
+
+
+
+
+
+/* //Работает
+var playAudioData = new Float32Array(0);
+var sampleRate = 8000;
+
+var audioContext, context, audioInput, filter, recorder, recording;
+var navigator = window.navigator;
+navigator.getUserMedia = (navigator.getUserMedia ||
+        navigator.webkitGetUserMedia ||
+        navigator.mozGetUserMedia ||
+        navigator.msGetUserMedia);
+
+var micBufferSize = 1024 * 2;//~ 20ms
+
+function converFloat32ToPcmu(buffer) {
+    var l = buffer.length;
+    var buf = [];//new Int8Array(l);
+    while (l--) {
+        buf[l] = g711.linear2ulaw(buffer[l] * 0xFFFF); //convert to pcmu
+    }
+    return buf;//.buffer
+}
+
+function converPcmuToFloat32(buffer) {
+    //var bufferView = new DataView(arrayBuffer);
+    var l = buffer.length;
+    var floatBuffer = new Float32Array(l);
+
+    //pcmu => Float
+    for (var i = 0; i < l; i++)
+        floatBuffer[i] = (g711.ulaw2linear(buffer[i])) / 0x7FFF;
+    return floatBuffer;
+}
+
+function Float32Concat(first, second) {
+    var firstLength = first.length,
+        result = new Float32Array(firstLength + second.length);
+    result.set(first);
+    result.set(second, firstLength);
+    return result;
+}
+
+function playBuffer(obj) {
+    playAudioData = Float32Concat(playAudioData, obj);
+
+    var audioBuffer = context.createBuffer(1, playAudioData.length, sampleRate);
+    audioBuffer.getChannelData(0).set(obj);
+    var source = context.createBufferSource();
+    source.buffer = audioBuffer;
+    source.connect(context.destination);
+    source.start();
+};
+
+
+
+
+if (navigator.getUserMedia) {
+    navigator.getUserMedia({
+        audio: true
+    }, success, function (e) {
+        alert('Error capturing audio.');
+    });
+} else {
+    alert('getUserMedia not supported in this browser.');
+}
+
+
+
+function success(e) {
+    audioContext = window.AudioContext || window.webkitAudioContext;
+    context = new audioContext();
+    recording = false;
+    filter = context.createBiquadFilter();
+    filter.type = 'lowpass';
+    filter.frequency.value = sampleRate / 2;
+    audioInput = context.createMediaStreamSource(e);
+    recorder = context.createScriptProcessor(micBufferSize, 1, 1);
+
+    var resamplerObj = new Resampler(context.sampleRate, sampleRate, 1, micBufferSize, false);
+    recorder.onaudioprocess = function (audioEvents) {
+        var micBuffer;
+        var left = audioEvents.inputBuffer.getChannelData(0);
+        micBuffer = resamplerObj.resampler(left);
+
+        micBuffer = converFloat32ToPcmu(micBuffer);
+        micBuffer = converPcmuToFloat32(micBuffer)
+
+        console.log(micBuffer);
+
+        playBuffer(micBuffer);
+    }
+
+    audioInput.connect(filter);
+    filter.connect(recorder);
+    recorder.connect(context.destination);
+}
+*/
