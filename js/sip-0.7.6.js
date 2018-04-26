@@ -13344,6 +13344,7 @@
                     navigator.msGetUserMedia);
             
             var micBufferSize = 1024 * 2;//~ 20ms
+            // var micBufferSize = 2048 * 2;//~ 20ms
 
             function converFloat32ToPcmu(buffer) {
               var l = buffer.length;
@@ -13367,7 +13368,7 @@
             } else {
                 alert('getUserMedia not supported in this browser.');
             }
-          
+
           function success(e) {
               console.log('success ', e);
               window.instanceLocalMediaStream = window.instanceLocalMediaStream || e;

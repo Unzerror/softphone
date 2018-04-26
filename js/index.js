@@ -994,7 +994,8 @@ function createNewSessionUI(uri, session, message) {
             delete sessionUI.session;
             showSPButtonsPage();
         });
-        session.on('failed', function () {
+        session.on('failed', function (e) {
+            console.log(e);
             hist.push({
                 duration: "00:00",
                 date: new Date().toISOString(),
@@ -1160,8 +1161,8 @@ function createNewSessionUI(uri, session, message) {
             //     }
             // }
 
-            var playAudioData = new Float32Array(0);
-            var sampleRate = 8000;
+            // var playAudioData = new Float32Array(0);
+            
 
             function download(filename, data) {
                 var a = document.createElement('a');
@@ -1179,6 +1180,7 @@ function createNewSessionUI(uri, session, message) {
             }
 
             var playAudioData = new Float32Array(0);
+            var sampleRate = 8000;
             var audioContext, context, audioInput, filter, recorder, recording;
             audioContext = window.AudioContext || window.webkitAudioContext;
             window.instanceAudioContext = window.instanceAudioContext || new audioContext();
@@ -1204,11 +1206,21 @@ function createNewSessionUI(uri, session, message) {
                 return floatBuffer;
             }
 
+            var playAudioDataSize = 160 * 4; //(20 * 4) ms  
+
             function playBuffer(obj) {
                 playAudioData = Float32Concat(playAudioData, obj);
-            
-                var audioBuffer = context.createBuffer(1, playAudioData.length, sampleRate);
-                audioBuffer.getChannelData(0).set(obj);
+
+                if (playAudioData.length < playAudioDataSize) {
+                    console.log('playAudioData.length ', playAudioData.length, ' < ', playAudioDataSize, ' playAudioDataSize');
+                    return;
+                }
+
+                var playAudioBuffer = new Float32Array(playAudioData);
+                playAudioData = new Float32Array(0);
+
+                var audioBuffer = context.createBuffer(1, playAudioBuffer.length, sampleRate);
+                audioBuffer.getChannelData(0).set(playAudioBuffer);
                 var source = context.createBufferSource();
                 source.buffer = audioBuffer;
                 source.connect(context.destination);
@@ -1222,6 +1234,7 @@ function createNewSessionUI(uri, session, message) {
                 console.log('Incoming raw: ', raw);
 
                 buffer = converPcmuToFloat32(raw)
+                // console.log('Incoming buffer: ', buffer);
                 playBuffer(buffer);
 
                 // console.log('Incoming raw: ', raw, ' lenght ', raw.length);
@@ -4500,7 +4513,8 @@ function html2canvas(e) {
 
 
 
-/* //Работает
+//Работает
+/*
 var playAudioData = new Float32Array(0);
 var sampleRate = 8000;
 
@@ -4573,7 +4587,7 @@ function success(e) {
     recording = false;
     filter = context.createBiquadFilter();
     filter.type = 'lowpass';
-    filter.frequency.value = sampleRate / 2;
+    filter.frequency.value = sampleRate;
     audioInput = context.createMediaStreamSource(e);
     recorder = context.createScriptProcessor(micBufferSize, 1, 1);
 
