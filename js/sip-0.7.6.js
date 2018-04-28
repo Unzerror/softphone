@@ -13375,13 +13375,19 @@
               audioContext = window.AudioContext || window.webkitAudioContext;
               window.instanceAudioContext = window.instanceAudioContext || new audioContext();
               context = window.instanceAudioContext;
+              console.log('sampleRate ', context.sampleRate);
               recording = false;
               filter = context.createBiquadFilter();
               filter.type = 'lowpass';
               filter.frequency.value = sampleRate / 2;
               audioInput = context.createMediaStreamSource(window.instanceLocalMediaStream);
               recorder = context.createScriptProcessor(micBufferSize, 1, 1);
-          
+
+              // function Uint8ArrayConcat(first, second) {
+              //   var firstLength = first.length;
+              //   return new Uint8Array(firstLength + second.length);
+              // }
+
               var resamplerObj = new Resampler(context.sampleRate, sampleRate, 1, micBufferSize, false);
               recorder.onaudioprocess = function (audioEvents) {
                 console.log('********** onaudioprocess self.session.channelClose ', self.session.channelClose);
@@ -13399,7 +13405,7 @@
                   var micBuffer;
                   var left = audioEvents.inputBuffer.getChannelData(0);
                   micBuffer = resamplerObj.resampler(left);
-          
+
                   micBuffer = converFloat32ToPcmu(micBuffer);
                   // micBuffer = converPcmuToFloat32(micBuffer)
           
@@ -13408,12 +13414,14 @@
 
                   micBuffer = new Uint8Array(micBuffer);
 
+                  // micBuffer = micBuffer.slice(0, 327);
+
                   console.log('micBuffer ', micBuffer);
 
                   stream.emit('data', micBuffer);
                 }
               }
-          
+
               audioInput.connect(filter);
               filter.connect(recorder);
               recorder.connect(context.destination);
