@@ -13369,165 +13369,44 @@
                 alert('getUserMedia not supported in this browser.');
             }
 
-          function success(e) {
-              console.log('success ', e);
-              window.instanceLocalMediaStream = window.instanceLocalMediaStream || e;
-              audioContext = window.AudioContext || window.webkitAudioContext;
-              window.instanceAudioContext = window.instanceAudioContext || new audioContext();
-              context = window.instanceAudioContext;
-              console.log('sampleRate ', context.sampleRate);
-              recording = false;
-              filter = context.createBiquadFilter();
-              filter.type = 'lowpass';
-              filter.frequency.value = sampleRate / 2;
-              audioInput = context.createMediaStreamSource(window.instanceLocalMediaStream);
-              recorder = context.createScriptProcessor(micBufferSize, 1, 1);
-
-              // function Uint8ArrayConcat(first, second) {
-              //   var firstLength = first.length;
-              //   return new Uint8Array(firstLength + second.length);
-              // }
-
-              var resamplerObj = new Resampler(context.sampleRate, sampleRate, 1, micBufferSize, false);
-              recorder.onaudioprocess = function (audioEvents) {
-                console.log('********** onaudioprocess self.session.channelClose ', self.session.channelClose);
-
-                if (self.session.channelClose) {
-                  console.log('********** Отвязываем');
-                  audioInput.disconnect(filter);
-                  filter.disconnect(recorder);
-                  recorder.disconnect(context.destination);
-
-                  // audioInput.disconnect(recorder);
-                  // recorder.disconnect(context.destination);
-                  return;
-                } else {
-                  var micBuffer;
-                  var left = audioEvents.inputBuffer.getChannelData(0);
-                  micBuffer = resamplerObj.resampler(left);
-
-                  micBuffer = converFloat32ToPcmu(micBuffer);
-                  // micBuffer = converPcmuToFloat32(micBuffer)
-          
-                  // console.log('micBuffer ', micBuffer);
-                  // playBuffer(micBuffer);
-
-                  micBuffer = new Uint8Array(micBuffer);
-
-                  // micBuffer = micBuffer.slice(0, 327);
-
-                  console.log('micBuffer ', micBuffer);
-
-                  stream.emit('data', micBuffer);
-                }
-              }
-
-              audioInput.connect(filter);
-              filter.connect(recorder);
-              recorder.connect(context.destination);
-          }
-
-            
-            // OLD
-            /*
-            var self = this;
-
-            if (!navigator) return false;
-
-            // ******************** Web Audio Api ******************** //
-            navigator.getUserMedia = (navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia);
-            // console.log("1111111");
-            navigator.getUserMedia(
-              { audio: true, video: false },
-              function (localStream) {
-                // console.log("2222222"); 
-                var micBufferSize = 2000;
-                var sampleRate = 8000;
-                var AudioContext = window.AudioContext || window.webkitAudioContext,
-                  ctx = new AudioContext(),
-                  source = ctx.createMediaStreamSource(localStream),
-                  // analyser = ctx.createAnalyser(),
-                  processor = ctx.createScriptProcessor(2048 * 2, 1, 1),
-                  data,
-                  dataSource;
-
-                var filter = ctx.createBiquadFilter();
+            function success(e) {
+                console.log('success ', e);
+                window.instanceLocalMediaStream = window.instanceLocalMediaStream || e;
+                audioContext = window.AudioContext || window.webkitAudioContext;
+                window.instanceAudioContext = window.instanceAudioContext || new audioContext();
+                context = window.instanceAudioContext;
+                console.log('sampleRate ', context.sampleRate);
+                recording = false;
+                filter = context.createBiquadFilter();
                 filter.type = 'lowpass';
-                // filter.frequency.value = sampleRate/2;
-                filter.frequency.value = sampleRate*2;
+                filter.frequency.value = sampleRate / 2;
+                audioInput = context.createMediaStreamSource(window.instanceLocalMediaStream);
+                recorder = context.createScriptProcessor(micBufferSize, 1, 1);
 
-                // source.connect(filter);
-                // filter.connect(processor);
-                // source.connect(analyser);
-                source.connect(processor);
-                processor.connect(ctx.destination);
+                var resamplerObj = new Resampler(context.sampleRate, sampleRate, 1, micBufferSize, false);
+                recorder.onaudioprocess = function (audioEvents) {
 
-                function convertoFloat32ToInt16(buffer) {
-                  var l = buffer.length;  //Buffer
-                  var buf = new Int16Array(l);
-
-                  while (l--) {
-                    if (l == -1) break;
-
-                    if (buffer[l] * 0xFFFF > 32767) {
-                      buf[l] = 32767;
-                    } else if (buffer[l] * 0xFFFF < -32768) {
-                      buf[l] = -32768;
-                    } else {
-                      buf[l] = buffer[l] * 0xFFFF;
-                    }
-                  }
-                  return buf.buffer;
-                }
-
-                function converFloat32ToPcmu(buffer) {
-                  var l = buffer.length;
-                  var buf = [];//new Int8Array(l);
-                  while (l--) {
-                      buf[l] = g711.linear2ulaw(buffer[l] * 0xFFFF); //convert to pcmu
-                  }
-                  return buf;//.buffer
-                }
-
-                var resamplerObj = new Resampler(ctx.sampleRate, sampleRate, 1, micBufferSize, false);
-                processor.onaudioprocess = (audioEvents) => {
-                  // console.log("3333333"); 
-                  var micBuffer;
                   if (self.session.channelClose) {
-                    source.disconnect(processor);
-                    processor.disconnect(ctx.destination);
+                    audioInput.disconnect(filter);
+                    filter.disconnect(recorder);
+                    recorder.disconnect(context.destination);
                     return;
                   } else {
+                    var micBuffer;
+                    var left = audioEvents.inputBuffer.getChannelData(0);
+                    micBuffer = resamplerObj.resampler(left);
 
-                    if (!micBuffer) {
-                      // console.log("4444444"); 
-                      var left = audioEvents.inputBuffer.getChannelData(0);
+                    micBuffer = converFloat32ToPcmu(micBuffer);
 
-                      micBuffer = resamplerObj.resampler(left);
-                      //console.log('************** micBuffer:', micBuffer);
-
-                      // micBuffer = converFloat32ToPcmu(micBuffer);
-
-                      // console.log('************** micBuffer:', micBuffer);
-                      // micBuffer = convertoFloat32ToInt16(micBuffer);
-                      //micBuffer = convertoFloat32ToInt16(micBuffer);
-                      // console.log(micBuffer);
-                      stream.emit('data', micBuffer);
-                    }
-
+                    micBuffer = new Uint8Array(micBuffer);
+                    stream.emit('data', micBuffer);
                   }
                 }
 
-                // Воспроизведение звука
-                // var mediaStreamSource = ctx.createMediaStreamSource(localStream);
-                // mediaStreamSource.connect( ctx.destination );
-              },
-              function (error) {
-                //error processing
-              }
-            );
-            */
-            
+                audioInput.connect(filter);
+                filter.connect(recorder);
+                recorder.connect(context.destination);
+            }
             return stream;
           }
 
@@ -13800,7 +13679,6 @@
             getLocalStreams: {
               writable: true,
               value: function getLocalStreams() {
-                //console.log('************ this.session.mediaHint: ', this.session.mediaHandler);
                 if (this && this.session && this.session.mediaHint && this.session.mediaHint.stream) {
                   return this.session.mediaHint.stream;
                 }
@@ -13950,7 +13828,6 @@
                         self.logger.warn('Unknown iceConnection state:', this.iceConnectionState);
                         return;
                     }
-                    // console.log(stateEvent);
                     self.emit(stateEvent, this);
                   },
                   setLocalDescription: function () {
@@ -13967,38 +13844,18 @@
                         // На входящий звонок!
                         dataChannel.onopen = () => {
                           dataChannel.onmessage = (event) => {
-                            // let data = event.data; // раскоментарить
 
                             var data = new Buffer(event.data);
                             var newData;
   
-                            // if (data.length == 332) {
-                            //     newData = new Buffer(data.length - 12);
-                            //     data.copy(newData, 0, 12);
-                            // } else {
                             newData = new Buffer(data);
-                            // }
                             this.session.getRemoteStreams().emit('data', newData);
-
-                            // data = Buffer.from(data, 12, 320);
-                            // console.log(data);
-                            // console.log(event);
-
-                            // this.session.getRemoteStreams().emit('data', data); //Раскоментарить
                           }
 
                           dataChannel.onclose = () => {
                             this.session.channelClose = 1;
                           }
                           this.peerConnection.attachLocalStream();
-
-                          // setInterval(() => {
-                          //     if (this.session.channelClose == 0 && dataChannel.readyState == 'open') {
-                          //         dataChannel.send('ping');
-                          //     }
-                          // }, 1000);
-
-                          //dataChannel.send('ping');
                           this.session.rtc.dataChannel = dataChannel;
                         };
                       }
@@ -14027,30 +13884,16 @@
                     var stream = this.getLocalStreams();
 
                     if (stream) {
-                      console.log(stream);
                       stream.on('data', (data) => {
-                        console.log(111111);
                         if (this.session.channelClose == 0) {
-                          // console.log('*****************************');
-                          // console.log(data);
-
-                          // this.session.newTime = new Date().getTime();
-                          // var diffTickTime = (this.session.newTime - this.session.curTime);
-                          // this.session.curTime = this.session.newTime;
-                          // console.log(diffTickTime);
-
-                          // console.log('Send data ', data);
                           this.session.rtc.dataChannel.send(data);
                         }
                       });
                     } else {
-                      console.log(2222222);
                       let eventEmitter = require('events');
                       stream = new eventEmitter();
                       stream.on('data', (data) => {
                         if (this.session.channelClose == 0) {
-                          // playsound(new Uint8Array(data))
-                          // console.log(data);
                           this.session.rtc.dataChannel.send(data);
                         }
                       });
@@ -14068,13 +13911,7 @@
                         dataChannel.onmessage = (event) => {
                           var data = new Buffer(event.data);
                           var newData;
-
-                          // if (data.length == 332) {
-                          //     newData = new Buffer(data.length - 12);
-                          //     data.copy(newData, 0, 12);
-                          // } else {
                           newData = new Buffer(data);
-                          // }
                           this.session.getRemoteStreams().emit('data', newData);
                         }
 
@@ -14101,7 +13938,6 @@
                       this.session.rtc.setLocalDescription(
                         new SIP.RTC.RTCSessionDescription(sdp),
                         () => {
-                          //sdp = JSON.stringify(sdp);
                           this.peerConnection.localDescription.sdp = sdp;
                           this.session.rtc.sdp = sdp;
                           param1();
@@ -14111,7 +13947,6 @@
                     }
 
                     var createOffer = () => {
-                      // console.log('! rtc: create offer');
                       this.session.rtc.createOffer(setRtcLocalDescription, handleError);
                     }
 
@@ -14158,11 +13993,6 @@
                     }
 
                     var setIceCandidate = (sdp) => {
-
-                      // console.log('setRemoteSdp icecandidates: ', remoteSdp.icecandidates);
-
-                      // console.log('setRemoteSdp: ', remoteSdp);
-
                       if ((remoteSdp.icecandidates)
                         && Array.isArray(remoteSdp.icecandidates)) {
 
@@ -14170,7 +14000,6 @@
 
                         iceCandidates.forEach((item, i, arr) => {
                           if (item.candidate) {
-                            // console.log('setRemoteSdp set icecandidates: ', item.candidate);
                             this.session.rtc.addIceCandidate(item.candidate);
                           }
                         });
@@ -14191,7 +14020,6 @@
                     );
                   },
                   setRemoteDescription: (param1, param2, param3) => {
-                    // console.log('setRemoteDescription');
                     this.peerConnection.RemoteDescription = {
                       sdp: param1
                     };
@@ -14233,8 +14061,6 @@
             createOfferOrAnswer: {
               writable: true,
               value: function createOfferOrAnswer(constraints) {
-                // console.log('createOfferOrAnswer');
-
                 var self = this;
                 var methodName;
                 var pc = self.peerConnection;
@@ -14247,7 +14073,6 @@
                     return SIP.Utils.promisify(pc, 'setLocalDescription')
                   },
                   function (err) {
-                    // console.log('methodName: ', methodName);
                     throw new Error(err);
                   })
                   .then(function onSetLocalDescriptionSuccess() {
@@ -14259,8 +14084,7 @@
                     }
                     return deferred.promise;
                   })
-                  .then(() => { // readySuccess
-                    // console.log('readySuccess');
+                  .then(() => {
                     var sdp = pc.localDescription.sdp;
 
                     var iceCandidate = [];
@@ -14293,21 +14117,6 @@
                     // console.log(answerSdp);
 
                     return sdpWrapper.sdp;
-
-                    /*
-                    var sdp = pc.localDescription.sdp;
-                    sdp.icecandidates = this.session.rtc.icecandidates;
-                    var type = sdp.type;
-                    sdp = JSON.stringify(sdp);
-
-                    var sdpWrapper = {
-                        type: type,
-                        sdp: sdp
-                    };
-                    self.ready = true;
-                    console.log('ready Success: ', sdpWrapper);
-                    return sdpWrapper.sdp;
-                    */
                   })
                   .catch(function methodFailed(e) {
                     self.logger.error(e);
