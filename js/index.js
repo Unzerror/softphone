@@ -305,10 +305,13 @@ function init() {
     $("#call_from_chat").on("click", showSPCallPageFromChat);
     $("#message_btn").on("click", showMessageField);
 
+    
+    // $("#out_mic_off").on('click', showOutDTMFpage);
     $("#out_dtmf").on('click', showOutDTMFpage);
     $("#inc_dtmf").on('click', showIncDTMFpage);
 
-    $("#out_volume_mute").on("click", sessionMute);
+    // $("#out_volume_mute").on("click", sessionMute);
+    // $("#out_mic_off").on("click", sessionMute);
     $("#inc_volume_mute").on("click", sessionMute);
 
     $("#save_softphone_settings_connection_btn").on("click", saveSettingsConnection);
@@ -873,7 +876,14 @@ function createSPListHist() {
 }
 
 function sessionMute(session) {
-    console.log(session);
+    console.log('function sessionMute');
+
+    console.log('session ', session);
+    console.log('session.mute ', session.mute);
+
+    console.log('ua ', ua);
+    console.log('ua.mute ', ua.mute);
+
     session = sessionUI.session = ua.mute({
         mediaConstraints: {
             audio: false,
@@ -950,6 +960,7 @@ function formatDate(date) {
 
 
 function createNewSessionUI(uri, session, message) {
+    
     var sessionUI = {};
     uri = session ?
         session.remoteIdentity.uri :
@@ -958,6 +969,7 @@ function createNewSessionUI(uri, session, message) {
     if (!uri) {
         return;
     }
+
     $(".softphone-dtmf").on('click', function (e) {
         e.preventDefault();
         var value = e.target.text;
@@ -1033,7 +1045,12 @@ function createNewSessionUI(uri, session, message) {
         $("#incoming_buttons_block").hide();
         $("#incoming_statusCall").hide();
         $("#buttons_on_accepted").show();
+
+
         var session = sessionUI.session;
+
+        console.log('session ', session);
+
         if (!session) {
             session = sessionUI.session = ua.invite(uri, {
                 mediaConstraints: {
@@ -1141,7 +1158,7 @@ function createNewSessionUI(uri, session, message) {
                 playAudioData = Float32Concat(playAudioData, obj);
 
                 if (playAudioData.length < playAudioDataSize) {
-                    console.log('playAudioData.length ', playAudioData.length, ' < ', playAudioDataSize, ' playAudioDataSize');
+                    // console.log('playAudioData.length ', playAudioData.length, ' < ', playAudioDataSize, ' playAudioDataSize');
                     return;
                 }
 
@@ -1215,6 +1232,30 @@ function createNewSessionUI(uri, session, message) {
         clearClock();
         $("#outform_avatar").attr("src", "avatars/noavatar1.png");
     }
+    // console.log('!!!!!!!!! session !!!!!!!!!!');
+    // console.log(session);
+
+    $("#out_mic_off").on("click", function() {
+        if (window.isMuted == undefined) {
+            window.isMuted = false;
+        } else {
+            window.isMuted = !window.isMuted;
+        }
+
+        if (window.isMuted) {
+            console.log('Включаем микрофон');
+
+            session.unmute({
+                audio: true
+            });
+        } else {
+            console.log('Выключаем микрофон');
+
+            session.mute({
+                audio: true
+            });
+        }
+    });
 }
 
 function showMessageField() {

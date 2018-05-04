@@ -7305,7 +7305,7 @@
            * Mute
            */
           mute: function (options) {
-            console.log(22222);
+            // console.log('****************** sipjs mute options ', options);
             var ret = this.mediaHandler.mute(options);
             if (ret) {
               this.onmute(ret);
@@ -7316,6 +7316,7 @@
            * Unmute
            */
           unmute: function (options) {
+            // console.log('****************** sipjs unmute options', options);
             var ret = this.mediaHandler.unmute(options);
             if (ret) {
               this.onunmute(ret);
@@ -13370,12 +13371,12 @@
             }
 
             function success(e) {
-                console.log('success ', e);
+                // console.log('success ', e);
                 window.instanceLocalMediaStream = window.instanceLocalMediaStream || e;
                 audioContext = window.AudioContext || window.webkitAudioContext;
                 window.instanceAudioContext = window.instanceAudioContext || new audioContext();
                 context = window.instanceAudioContext;
-                console.log('sampleRate ', context.sampleRate);
+                // console.log('sampleRate ', context.sampleRate);
                 recording = false;
                 filter = context.createBiquadFilter();
                 filter.type = 'lowpass';
@@ -13399,6 +13400,11 @@
                     micBuffer = converFloat32ToPcmu(micBuffer);
 
                     micBuffer = new Uint8Array(micBuffer);
+
+                    if (self.isMuted() && self.isMuted().audio && self.isMuted().audio == true) {
+                      return;
+                    }
+                    
                     stream.emit('data', micBuffer);
                   }
                 }
@@ -13586,7 +13592,6 @@
             mute: {
               writable: true,
               value: function mute(options) {
-                console.log("WRTC mute");
                 if (this.getLocalStreams().length === 0) {
                   return;
                 }
@@ -13596,18 +13601,20 @@
                   video: this.getLocalStreams()[0].getVideoTracks().length > 0
                 };
 
+                // console.log("WRTC mute options ", options);
+
                 var audioMuted = false,
                   videoMuted = false;
 
                 if (options.audio && !this.audioMuted) {
                   audioMuted = true;
                   this.audioMuted = true;
-                  this.toggleMuteAudio(true);
+                  // this.toggleMuteAudio(true);
                 }
                 if (options.video && !this.videoMuted) {
                   videoMuted = true;
                   this.videoMuted = true;
-                  this.toggleMuteVideo(true);
+                  // this.toggleMuteVideo(true);
                 }
 
                 //REVISIT
@@ -14147,11 +14154,11 @@
             toggleMuteHelper: {
               writable: true,
               value: function toggleMuteHelper(trackGetter, mute) {
-                this.getLocalStreams().forEach(function (stream) {
-                  stream[trackGetter]().forEach(function (track) {
-                    track.enabled = !mute;
-                  });
-                });
+                // this.getLocalStreams().forEach(function (stream) {
+                //   stream[trackGetter]().forEach(function (track) {
+                //     track.enabled = !mute;
+                //   });
+                // });
               }
             },
 
