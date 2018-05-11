@@ -1152,25 +1152,30 @@ function createNewSessionUI(uri, session, message) {
                 return floatBuffer;
             }
 
-            var playAudioDataSize = 160 * 4; //(20 * 4) ms  
+            var playAudioDataSize = 640; // 80 ms
+            var nextTime = 0;
 
             function playBuffer(obj) {
-                playAudioData = Float32Concat(playAudioData, obj);
-
-                if (playAudioData.length < playAudioDataSize) {
-                    // console.log('playAudioData.length ', playAudioData.length, ' < ', playAudioDataSize, ' playAudioDataSize');
-                    return;
+                if (obj) {
+                    playAudioData = Float32Concat(playAudioData, obj);
                 }
 
-                var playAudioBuffer = new Float32Array(playAudioData);
+                if (playAudioData.length < playAudioDataSize)
+                    return;
+
+                var audioBuffer = context.createBuffer(1, playAudioData.length, sampleRate);
+                audioBuffer.getChannelData(0).set(playAudioData);
                 playAudioData = new Float32Array(0);
 
-                var audioBuffer = context.createBuffer(1, playAudioBuffer.length, sampleRate);
-                audioBuffer.getChannelData(0).set(playAudioBuffer);
                 var source = context.createBufferSource();
+
                 source.buffer = audioBuffer;
                 source.connect(context.destination);
-                source.start();
+                if (nextTime == 0)
+                    nextTime = context.currentTime + 0.05;
+
+                source.start(nextTime);
+                nextTime += source.buffer.duration;
             };
 
             stream.on("data", function (data) {
@@ -4460,7 +4465,8 @@ function Float32Concat(first, second) {
 }
 
 function playBuffer(obj) {
-    playAudioData = Float32Concat(playAudioData, obj);
+    // playAudioData = Float32Concat(playAudioData, obj);
+    playAudioData = obj;
 
     var audioBuffer = context.createBuffer(1, playAudioData.length, sampleRate);
     audioBuffer.getChannelData(0).set(obj);
@@ -4501,8 +4507,8 @@ function success(e) {
         var left = audioEvents.inputBuffer.getChannelData(0);
         micBuffer = resamplerObj.resampler(left);
 
-        micBuffer = converFloat32ToPcmu(micBuffer);
-        micBuffer = converPcmuToFloat32(micBuffer)
+        // micBuffer = converFloat32ToPcmu(micBuffer);
+        // micBuffer = converPcmuToFloat32(micBuffer)
 
         console.log(micBuffer);
 
