@@ -1179,6 +1179,7 @@ function createNewSessionUI(uri, session, message) {
             };
 
             stream.on("data", function (data) {
+                // console.log(data);
                 var raw, buffer;
                 raw = data;
                 buffer = converPcmuToFloat32(raw)
