@@ -731,4 +731,15 @@ padding-top: 7px;
     #chat_input_from_buttons_page{
         padding: .8rem 0 0.9rem 0;
     }
+    #chat_send_btn {
+        height: 40px;
+        width: 40px;
+    }
+    #chat_send_btn i {
+        line-height: 0px;
+    }
+    #chat_send_btn_from_buttons_page i {
+        font-size: 27px;
+    }
+    
 }
