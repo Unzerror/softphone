@@ -326,7 +326,6 @@ body > div.ui-loader.ui-corner-all.ui-loader-default.ui-body-a {
 .dialer {
     min-width: 90px;
     height: 10vh !important;
-    width: 12vw !important;
     color: rgb(255, 255, 255) !important;
     font-size: 6vh;
     line-height: 10vh;
