@@ -271,6 +271,7 @@ body > div.ui-loader.ui-corner-all.ui-loader-default.ui-body-a {
 .indicator {
     background-color: white !important;
     height: 0.3rem;
+    right: unset !important;
 }
 
 .tab a i {
